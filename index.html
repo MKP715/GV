@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920,initial-scale=1">
+<title>AA Grapevine / La Viña — NETA 65 Spring Assembly</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100vw;height:100vh;overflow:hidden}
+body{background:linear-gradient(-45deg,#0d0d1a,#1a0a2e,#0a1628,#1a0a20);background-size:400% 400%;
+animation:bgShift 30s ease infinite;color:#fff;font-family:'Segoe UI',system-ui,sans-serif}
+@keyframes bgShift{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
+
+/* ── TOP BAR ── */
+#top{position:fixed;top:0;left:0;right:0;height:52px;display:flex;justify-content:space-between;
+align-items:center;padding:0 16px;z-index:200;background:linear-gradient(180deg,rgba(0,0,0,.75) 60%,transparent)}
+#top-left,#top-right{display:flex;gap:8px;align-items:center}
+#top button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#fff;
+padding:6px 16px;font-size:14px;cursor:pointer;border-radius:6px;transition:.2s;white-space:nowrap}
+#top button:hover{background:rgba(240,192,64,.25);border-color:#f0c040}
+#top button.active{background:rgba(240,192,64,.3);border-color:#f0c040;color:#f0c040}
+#interact-count{color:rgba(255,255,255,.5);font-size:12px;padding:0 8px}
+
+/* ── SLIDES ── */
+.slide{position:fixed;top:52px;left:0;right:0;bottom:56px;display:flex;align-items:center;
+justify-content:center;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .5s;pointer-events:none}
+.slide.on{opacity:1;visibility:visible;pointer-events:auto}
+
+/* ── IMAGE SLIDE ── */
+#simg{max-width:94vw;max-height:calc(100vh - 136px);object-fit:contain;border-radius:10px;
+box-shadow:0 0 60px rgba(240,192,64,.2)}
+
+/* ── YOUTUBE SLIDE ── */
+.yt-l{width:78vw;height:calc(78vw*9/16);max-height:calc(100vh - 136px);border:none;border-radius:10px;
+box-shadow:0 0 60px rgba(240,192,64,.2)}
+.yt-p{width:calc((100vh - 136px)*9/16);height:calc(100vh - 136px);border:none;border-radius:10px;
+box-shadow:0 0 60px rgba(240,192,64,.2)}
+
+/* ── VIDEO SLIDE ── */
+#svid{max-width:88vw;max-height:calc(100vh - 136px);border-radius:10px;
+box-shadow:0 0 60px rgba(240,192,64,.2)}
+
+/* ── PDF SLIDE ── */
+#spdf{width:84vw;height:calc(100vh - 136px);border:none;border-radius:10px}
+
+/* ── TRIVIA SLIDE ── */
+#s-tri{text-align:center;padding:40px 60px;gap:8px}
+#tcat{color:#f0c040;font-size:18px;text-transform:uppercase;letter-spacing:4px}
+#tcat-es{color:rgba(240,192,64,.6);font-size:14px;text-transform:uppercase;letter-spacing:3px;margin-bottom:8px}
+.tri-q{font-size:clamp(24px,3.2vw,44px);font-weight:700;line-height:1.3;max-width:78vw;
+text-shadow:0 2px 20px rgba(0,0,0,.5)}
+.tri-q-es{font-size:clamp(18px,2.4vw,34px);color:rgba(255,255,255,.65);font-style:italic;
+line-height:1.3;max-width:78vw;margin-bottom:12px}
+#tri-cd{margin:16px 0}
+#rbtn{background:linear-gradient(135deg,#f0c040,#e6a800);color:#1a1a2e;border:none;
+padding:14px 48px;font-size:22px;font-weight:700;border-radius:50px;cursor:pointer;
+transition:transform .2s,box-shadow .2s;box-shadow:0 4px 30px rgba(240,192,64,.4)}
+#rbtn:hover{transform:scale(1.06);box-shadow:0 6px 40px rgba(240,192,64,.6)}
+.tri-a{font-size:clamp(20px,2.8vw,38px);color:#f0c040;max-width:78vw;
+opacity:0;transition:opacity .5s;font-weight:600}
+.tri-a-es{font-size:clamp(16px,2.2vw,30px);color:rgba(240,192,64,.65);max-width:78vw;
+opacity:0;transition:opacity .5s;font-style:italic}
+.tri-a.show,.tri-a-es.show{opacity:1}
+
+/* ── QUOTE SLIDE ── */
+#s-quote{text-align:center;padding:60px 80px;gap:20px}
+.quote-icon{font-size:60px;color:rgba(240,192,64,.3);line-height:1}
+.quote-en{font-size:clamp(26px,3.4vw,48px);font-weight:300;line-height:1.4;max-width:75vw;
+font-style:italic;text-shadow:0 2px 20px rgba(0,0,0,.4)}
+.quote-es{font-size:clamp(20px,2.6vw,36px);color:rgba(255,255,255,.55);font-style:italic;
+line-height:1.4;max-width:75vw}
+.quote-attr{color:#f0c040;font-size:clamp(16px,1.4vw,22px);letter-spacing:2px;margin-top:12px}
+
+/* ── FACT SLIDE ── */
+#s-fact{text-align:center;padding:60px 80px;gap:16px}
+.fact-label{font-size:20px;text-transform:uppercase;letter-spacing:5px;color:#f0c040}
+.fact-en{font-size:clamp(26px,3.2vw,46px);font-weight:600;line-height:1.4;max-width:78vw;
+text-shadow:0 2px 20px rgba(0,0,0,.4)}
+.fact-es{font-size:clamp(20px,2.4vw,34px);color:rgba(255,255,255,.55);font-style:italic;
+line-height:1.4;max-width:78vw}
+.fact-src{color:rgba(240,192,64,.5);font-size:14px;letter-spacing:2px;margin-top:8px}
+
+/* ── BOTTOM BAR ── */
+#bar{position:fixed;bottom:0;left:0;right:0;height:56px;
+background:linear-gradient(135deg,#1a1a2e,#2d1b4e);display:flex;align-items:center;
+justify-content:center;font-size:clamp(13px,1.4vw,19px);letter-spacing:2px;color:#f0c040;
+border-top:2px solid rgba(240,192,64,.3);z-index:200}
+
+/* ── PROGRESS BAR ── */
+#prog{position:fixed;bottom:56px;left:0;height:3px;
+background:linear-gradient(90deg,#f0c040,#ff6b6b);z-index:200;transition:width linear}
+
+/* ── OVERLAYS ── */
+#pind{position:fixed;top:62px;right:16px;background:rgba(0,0,0,.75);color:#f0c040;
+padding:5px 16px;border-radius:20px;font-size:13px;z-index:200;display:none;letter-spacing:1px}
+#cap{position:fixed;bottom:66px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);
+color:rgba(255,255,255,.7);padding:4px 18px;border-radius:20px;font-size:12px;z-index:200;max-width:70vw;
+text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ── COUNTDOWN RING ── */
+#cd-svg{filter:drop-shadow(0 0 12px rgba(240,192,64,.3))}
+#cd-ring{transition:stroke-dashoffset linear}
+#cd-num{font-family:'Segoe UI',system-ui,sans-serif}
+
+/* ── HISTORY INDICATOR ── */
+#hist-ind{color:rgba(255,255,255,.5);font-size:12px;padding:0 6px;min-width:40px;text-align:center}
+#top button:disabled{opacity:.3;cursor:default;pointer-events:none}
+
+/* ── CONFETTI ── */
+.cft{position:fixed;top:-12px;border-radius:2px;z-index:300;animation:cftFall linear forwards;pointer-events:none}
+@keyframes cftFall{0%{opacity:1;transform:rotate(0deg) scale(1)}
+100%{top:110vh;opacity:0;transform:rotate(720deg) scale(.3)}}
+
+/* ── ENTRANCE ANIMATIONS ── */
+.anim-enter{animation-duration:.6s;animation-fill-mode:both}
+</style>
+</head>
+<body>
+
+<!-- ── TOP BAR ── -->
+<div id="top">
+  <div id="top-left">
+    <button type="button" onclick="goFS()">&#x26F6; Fullscreen</button>
+    <button type="button" id="langBtn" onclick="cycleLang()">EN/ES</button>
+  </div>
+  <span id="interact-count"></span>
+  <div id="top-right">
+    <button type="button" id="prevBtn" onclick="prev()" disabled>&#x25C0; Prev</button>
+    <span id="hist-ind"></span>
+    <button type="button" onclick="next()">Next &#x25B6;</button>
+    <button type="button" id="ppb" onclick="pp()">&#x23F8; Pause</button>
+  </div>
+</div>
+
+<!-- ── SLIDE CONTAINERS ── -->
+<div id="s-img" class="slide"><img id="simg" alt=""></div>
+<div id="s-yt" class="slide"><iframe id="syt" allow="autoplay;encrypted-media" allowfullscreen></iframe></div>
+<div id="s-vid" class="slide"><video id="svid" autoplay playsinline></video></div>
+<div id="s-tri" class="slide">
+  <div id="tcat"></div><div id="tcat-es"></div>
+  <div id="tq-en" class="tri-q"></div>
+  <div id="tq-es" class="tri-q-es"></div>
+  <div id="tri-cd">
+    <svg id="cd-svg" width="72" height="72" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="5"/>
+      <circle id="cd-ring" cx="50" cy="50" r="45" fill="none" stroke="#f0c040" stroke-width="5"
+        stroke-dasharray="283" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+      <text id="cd-num" x="50" y="58" text-anchor="middle" fill="#fff" font-size="28" font-weight="bold">15</text>
+    </svg>
+  </div>
+  <button type="button" id="rbtn" onclick="reveal()">Reveal Answer / Revelar Respuesta</button>
+  <div id="ta-en" class="tri-a"></div>
+  <div id="ta-es" class="tri-a-es"></div>
+</div>
+<div id="s-pdf" class="slide"><iframe id="spdf"></iframe></div>
+<div id="s-quote" class="slide">
+  <div class="quote-icon">&ldquo;</div>
+  <div id="q-en" class="quote-en"></div>
+  <div id="q-es" class="quote-es"></div>
+  <div id="q-attr" class="quote-attr"></div>
+</div>
+<div id="s-fact" class="slide">
+  <div class="fact-label">Did You Know? / &iquest;Sab&iacute;as que?</div>
+  <div id="f-en" class="fact-en"></div>
+  <div id="f-es" class="fact-es"></div>
+  <div id="f-src" class="fact-src"></div>
+</div>
+
+<!-- ── BOTTOM ELEMENTS ── -->
+<div id="prog"></div>
+<div id="pind">PAUSED / PAUSADO</div>
+<div id="cap"></div>
+<div id="bar">AA Grapevine / La Vi&ntilde;a &nbsp;&bull;&nbsp; NETA 65 Spring Assembly &nbsp;&bull;&nbsp; March 20&ndash;22, 2026</div>
+
+<script>
+/* ===========================================================================
+   NETA 65 — AA GRAPEVINE / LA VIÑA BOOTH PRESENTATION
+   All arrays are editable — add or remove items freely.
+   =========================================================================== */
+
+// ── CONFIG ───────────────────────────────────────────────────────────────────
+const DUR = {
+  img:    8000,   // image display time (ms)
+  yt:     40000,  // youtube regular video
+  yts:    28000,  // youtube short
+  vid:    60000,  // local video fallback timeout
+  tri:    18000,  // trivia total time
+  pdf:    12000,  // pdf display time
+  quote:  10000,  // quote display time
+  fact:   10000   // fun fact display time
+};
+
+// Content type weights (must sum to 1.0)
+const WEIGHTS = {
+  img:   0.30,
+  tri:   0.25,
+  yt:    0.15,
+  quote: 0.12,
+  fact:  0.08,
+  pdf:   0.06,
+  vid:   0.04
+};
+
+// ── IMAGE ARRAYS ─────────────────────────────────────────────────────────────
+const _W = 'WhatsApp/WhatsApp Image 2026-02-19 at ';
+const waImg = [
+'6.33.16 PM','6.33.20 PM','6.33.34 PM','6.33.35 PM','6.33.36 PM',
+'6.35.54 PM (1)','6.35.54 PM','6.35.55 PM',
+'6.36.26 PM (1)','6.36.26 PM (2)','6.36.26 PM (3)','6.36.26 PM',
+'6.36.47 PM','6.36.49 PM','6.36.54 PM','6.42.36 PM','6.49.51 PM',
+'6.50.31 PM','6.50.32 PM','6.50.35 PM','6.50.37 PM','6.51.17 PM','6.53.32 PM',
+'6.55.29 PM (1)','6.55.29 PM',
+'6.58.47 PM (1)','6.58.47 PM','6.58.48 PM','6.58.49 PM (1)','6.58.49 PM','6.58.50 PM',
+'6.58.59 PM','6.59.00 PM','6.59.28 PM','6.59.52 PM',
+'6.59.53 PM (1)','6.59.53 PM (2)','6.59.53 PM','6.59.54 PM',
+'7.00.00 PM (1)','7.00.00 PM','7.00.01 PM','7.00.05 PM','7.00.06 PM',
+'7.02.24 PM','7.03.24 PM','7.03.25 PM','7.03.26 PM','7.03.27 PM','7.03.33 PM',
+'7.03.35 PM (1)','7.03.35 PM','7.03.36 PM','7.03.38 PM','7.03.39 PM (1)','7.03.39 PM',
+'7.06.04 PM (1)','7.06.04 PM','7.06.05 PM (1)','7.06.05 PM',
+'7.06.06 PM','7.06.07 PM','7.06.08 PM',
+'7.06.13 PM (1)','7.06.13 PM (2)','7.06.13 PM','7.06.14 PM',
+'7.06.15 PM (1)','7.06.15 PM','7.06.17 PM','7.06.18 PM',
+'7.06.19 PM (1)','7.06.19 PM (2)','7.06.19 PM (3)','7.06.19 PM','7.06.23 PM',
+'7.07.44 PM (1)','7.07.44 PM','7.07.45 PM (1)','7.07.45 PM',
+'7.18.07 PM','7.18.08 PM (1)','7.18.08 PM','7.18.09 PM (1)','7.18.09 PM',
+'7.18.10 PM (1)','7.18.10 PM (2)','7.18.10 PM (3)','7.18.10 PM',
+'7.18.11 PM (1)','7.18.11 PM (2)','7.18.11 PM',
+'7.38.54 PM (1)','7.38.54 PM (2)','7.38.54 PM (3)','7.38.54 PM (4)',
+'7.38.54 PM (5)','7.38.54 PM (6)','7.38.54 PM (7)','7.38.54 PM',
+'7.38.55 PM (1)','7.38.55 PM (2)','7.38.55 PM (3)','7.38.55 PM',
+'7.38.56 PM (1)','7.38.56 PM (2)','7.38.56 PM (3)','7.38.56 PM (4)','7.38.56 PM',
+'7.39.17 PM (1)','7.39.17 PM',
+'7.39.18 PM (1)','7.39.18 PM (2)','7.39.18 PM (3)','7.39.18 PM (4)',
+'7.39.18 PM (5)','7.39.18 PM (6)','7.39.18 PM',
+'7.39.19 PM (1)','7.39.19 PM (2)','7.39.19 PM (3)','7.39.19 PM (4)','7.39.19 PM (5)','7.39.19 PM'
+].map(t => _W + t + '.jpeg');
+
+const emailImg = [
+'Email/Apps.jpeg','Email/Audiobook.jpg','Email/Carry the message.jpeg',
+'Email/Catalog.jpeg','Email/Free materials.jpeg','Email/Online free Resources.jpeg',
+'Email/Podcast.jpeg','Email/wrong size Taller de escritura La Vina El Ultimo Refugio (2).png',
+'Email/Youtube.jpeg'
+];
+
+const _G = 'Published authors 2025 - GV/';
+const gvImg = ['GV July.jpg','GV October .jpg','January GV.jpg','January.jpg',
+'July - A Vision for Me.jpg','July -Tradirion 7.jpg','October.jpg'].map(f => _G + f);
+
+const _L = 'Published authors La Vina Panel 75 - 2025/';
+const lvImg = ['Enero  Febrero - Mi Fuente de Vida.jpg','Enero  Febrero LV.png',
+'Júlio  Agosto LV.jpg','Marzo  Abril - Alteuismo.jpg','Marzo  Abril - Listo.jpg',
+'Nov  Dec Autonomia - Nadja F.jpg','November  December - Jorge .jpg',
+'November  December 2025.jpg','Septiembre  Octubre LV.jpg'].map(f => _L + f);
+
+const images = [...waImg, ...emailImg, ...gvImg, ...lvImg];
+
+// ── YOUTUBE VIDEOS ───────────────────────────────────────────────────────────
+// {id: YouTube video ID, t: title, s: 1=short/vertical 0=landscape}
+const ytVids = [
+{id:'_mjB6hXYHn4', t:'Victor E.', s:1},
+{id:'V55DUDvlsCQ', t:'Carry the Message Project', s:0},
+{id:'Rr2pOApIoW8', t:'Customer Service', s:0},
+{id:'0uyVPlTcSeI', t:'AA Grapevine', s:1},
+{id:'DCw44sBSZK8', t:'Digital Subscription', s:1},
+{id:'ws_e71-N2eI', t:'Types of Subscriptions', s:1},
+{id:'NWesIbTn6fw', t:'App Login', s:1},
+{id:'EbjToSvMr_o', t:'Instagram', s:1},
+{id:'V5Kv6LJObvc', t:'Meditation with Victor E.', s:1}
+];
+
+// ── LOCAL VIDEOS ─────────────────────────────────────────────────────────────
+const localVids = [
+'WhatsApp/WhatsApp Video 2026-02-19 at 6.14.06 PM.mp4',
+'WhatsApp/WhatsApp Video 2026-02-19 at 7.38.57 PM.mp4'
+];
+
+// ── PDFs ─────────────────────────────────────────────────────────────────────
+const pdfs = [
+{f:'Email/CARRY THE MESSAGE.pdf', t:'Carry the Message / Lleva el Mensaje'},
+{f:'Email/PODCAST.pdf', t:'Podcast'},
+{f:'Email/PODCAST (2).pdf', t:'Podcast (2)'}
+];
+
+// ── TRIVIA [category_en, q_en, a_en, q_es, a_es] ───────────────────────────
+// Category translations: History=Historia, Grapevine=Grapevine, La Viña=La Viña,
+// Steps=Pasos, Traditions=Tradiciones, Big Book=Libro Grande, Culture=Cultura, Service=Servicio
+const catES = {
+  'History':'Historia','Grapevine':'Grapevine','La Viña':'La Viña',
+  'Steps':'Pasos','Traditions':'Tradiciones','Big Book':'Libro Grande',
+  'Culture':'Cultura','Service':'Servicio'
+};
+
+const trivia = [
+// ── HISTORY (20) ──
+["History",
+ "What year was Alcoholics Anonymous founded?","1935",
+ "¿En qué año se fundó Alcohólicos Anónimos?","1935"],
+["History",
+ "Who are the co-founders of AA?","Bill Wilson (Bill W.) and Dr. Robert Smith (Dr. Bob)",
+ "¿Quiénes son los cofundadores de AA?","Bill Wilson (Bill W.) y el Dr. Robert Smith (Dr. Bob)"],
+["History",
+ "In what city was AA born?","Akron, Ohio",
+ "¿En qué ciudad nació AA?","Akron, Ohio"],
+["History",
+ "What is the exact founding date of AA?","June 10, 1935",
+ "¿Cuál es la fecha exacta de fundación de AA?","10 de junio de 1935"],
+["History",
+ "What spiritual movement influenced AA's early development?","The Oxford Group",
+ "¿Qué movimiento espiritual influyó en el desarrollo temprano de AA?","El Grupo Oxford"],
+["History",
+ "What hospital was Bill W. treated at before getting sober?","Towns Hospital, New York City",
+ "¿En qué hospital fue tratado Bill W. antes de lograr la sobriedad?","Hospital Towns, Ciudad de Nueva York"],
+["History",
+ "Who carried the message of sobriety to Bill W.?","Ebby Thacher (Ebby T.)",
+ "¿Quién llevó el mensaje de sobriedad a Bill W.?","Ebby Thacher (Ebby T.)"],
+["History",
+ "What was Dr. Bob's profession?","Surgeon / Physician",
+ "¿Cuál era la profesión del Dr. Bob?","Cirujano / Médico"],
+["History",
+ "What year did Dr. Bob pass away?","1950",
+ "¿En qué año falleció el Dr. Bob?","1950"],
+["History",
+ "What year did Bill W. pass away?","1971",
+ "¿En qué año falleció Bill W.?","1971"],
+["History",
+ "What was the name of Bill W.'s wife?","Lois Wilson",
+ "¿Cómo se llamaba la esposa de Bill W.?","Lois Wilson"],
+["History",
+ "What organization did Lois Wilson co-found?","Al-Anon Family Groups",
+ "¿Qué organización cofundó Lois Wilson?","Grupos de Familia Al-Anon"],
+["History",
+ "In what decade did AA begin?","The 1930s",
+ "¿En qué década comenzó AA?","La década de 1930"],
+["History",
+ "How many members did AA have by 1939?","About 100",
+ "¿Cuántos miembros tenía AA en 1939?","Alrededor de 100"],
+["History",
+ "What 1941 article boosted AA membership?","A Saturday Evening Post article by Jack Alexander",
+ "¿Qué artículo de 1941 impulsó la membresía de AA?","Un artículo del Saturday Evening Post por Jack Alexander"],
+["History",
+ "Where is the General Service Office located?","New York City",
+ "¿Dónde se encuentra la Oficina de Servicios Generales?","Ciudad de Nueva York"],
+["History",
+ "What does GSO stand for?","General Service Office",
+ "¿Qué significa OSG?","Oficina de Servicios Generales"],
+["History",
+ "Approximately how many AA members worldwide?","Over 2 million",
+ "¿Aproximadamente cuántos miembros de AA hay en el mundo?","Más de 2 millones"],
+["History",
+ "In about how many countries does AA exist?","Approximately 180",
+ "¿En aproximadamente cuántos países existe AA?","Aproximadamente 180"],
+["History",
+ "How many AA groups exist worldwide?","Over 120,000",
+ "¿Cuántos grupos de AA existen en el mundo?","Más de 120,000"],
+
+// ── GRAPEVINE / LA VIÑA (20) ──
+["Grapevine",
+ "What is the AA Grapevine?","The international journal of Alcoholics Anonymous",
+ "¿Qué es el AA Grapevine?","La revista internacional de Alcohólicos Anónimos"],
+["Grapevine",
+ "When was the first Grapevine issue published?","June 1944",
+ "¿Cuándo se publicó el primer número del Grapevine?","Junio de 1944"],
+["Grapevine",
+ "What is the Grapevine's nickname?","The meeting in print",
+ "¿Cuál es el apodo del Grapevine?","La reunión impresa"],
+["Grapevine",
+ "How often is the Grapevine published?","Monthly",
+ "¿Con qué frecuencia se publica el Grapevine?","Mensualmente"],
+["La Viña",
+ "What is La Viña?","The Spanish-language publication of AA",
+ "¿Qué es La Viña?","La publicación en español de AA"],
+["La Viña",
+ "When was La Viña first published?","1996",
+ "¿Cuándo se publicó La Viña por primera vez?","1996"],
+["La Viña",
+ "How often is La Viña published?","Bimonthly (every two months)",
+ "¿Con qué frecuencia se publica La Viña?","Bimestralmente (cada dos meses)"],
+["Grapevine",
+ "Who owns the AA Grapevine?","AA members through the General Service Conference",
+ "¿Quién es dueño del AA Grapevine?","Los miembros de AA a través de la Conferencia de Servicios Generales"],
+["Grapevine",
+ "Does the Grapevine accept outside advertising?","No",
+ "¿Acepta el Grapevine publicidad externa?","No"],
+["Grapevine",
+ "What type of content does the Grapevine feature?","Stories written by AA members",
+ "¿Qué tipo de contenido presenta el Grapevine?","Historias escritas por miembros de AA"],
+["Grapevine",
+ "What is the Grapevine website?","aagrapevine.org",
+ "¿Cuál es el sitio web del Grapevine?","aagrapevine.org"],
+["Grapevine",
+ "Is Grapevine available as a digital subscription?","Yes",
+ "¿Está disponible el Grapevine como suscripción digital?","Sí"],
+["Grapevine",
+ "Does the Grapevine have a podcast?","Yes",
+ "¿Tiene el Grapevine un podcast?","Sí"],
+["Grapevine",
+ "Can you access Grapevine on a mobile app?","Yes — iOS and Android",
+ "¿Se puede acceder al Grapevine en una aplicación móvil?","Sí — iOS y Android"],
+["Grapevine",
+ "What is the Carry the Message Project?","Bringing Grapevine literature to those who can't afford it",
+ "¿Qué es el Proyecto Lleva el Mensaje?","Llevar la literatura del Grapevine a quienes no pueden pagarla"],
+["Grapevine",
+ "Who writes the stories in the Grapevine?","AA members sharing experience, strength, and hope",
+ "¿Quién escribe las historias del Grapevine?","Miembros de AA compartiendo experiencia, fortaleza y esperanza"],
+["La Viña",
+ "What is La Viña's website?","aalavina.org",
+ "¿Cuál es el sitio web de La Viña?","aalavina.org"],
+["Grapevine",
+ "In what language is the Grapevine published?","English",
+ "¿En qué idioma se publica el Grapevine?","Inglés"],
+["Grapevine",
+ "What was the original format of the Grapevine?","A small newsletter / magazine",
+ "¿Cuál era el formato original del Grapevine?","Un pequeño boletín / revista"],
+["Grapevine",
+ "True or False: Grapevine offers daily online content.","True",
+ "¿Verdadero o Falso: El Grapevine ofrece contenido diario en línea?","Verdadero"],
+
+// ── 12 STEPS (15) ──
+["Steps",
+ "How many steps are in the AA program?","12",
+ "¿Cuántos pasos tiene el programa de AA?","12"],
+["Steps",
+ "What is the first step about?","Admitting powerlessness over alcohol",
+ "¿De qué trata el primer paso?","Admitir la impotencia ante el alcohol"],
+["Steps",
+ "Which step involves a searching moral inventory?","Step 4",
+ "¿Qué paso involucra un minucioso inventario moral?","Paso 4"],
+["Steps",
+ "Which step involves admitting wrongs to another person?","Step 5",
+ "¿Qué paso involucra admitir los errores a otra persona?","Paso 5"],
+["Steps",
+ "Which step is about making a list of persons harmed?","Step 8",
+ "¿Qué paso trata de hacer una lista de personas perjudicadas?","Paso 8"],
+["Steps",
+ "Which step involves making direct amends?","Step 9",
+ "¿Qué paso involucra hacer reparaciones directas?","Paso 9"],
+["Steps",
+ "Which step is about prayer and meditation?","Step 11",
+ "¿Qué paso trata sobre la oración y la meditación?","Paso 11"],
+["Steps",
+ "What is Step 12 about?","Carrying the message to other alcoholics",
+ "¿De qué trata el Paso 12?","Llevar el mensaje a otros alcohólicos"],
+["Steps",
+ "Which step asks members to be 'entirely ready'?","Step 6",
+ "¿Qué paso pide estar 'enteramente dispuestos'?","Paso 6"],
+["Steps",
+ "Which step first mentions a 'Power greater than ourselves'?","Step 2",
+ "¿Qué paso menciona por primera vez un 'Poder Superior a nosotros mismos'?","Paso 2"],
+["Steps",
+ "Complete: 'Humbly asked Him to remove our ___.","Shortcomings (Step 7)",
+ "Completa: 'Le pedimos humildemente que nos librase de nuestros ___.","Defectos de carácter (Paso 7)"],
+["Steps",
+ "Which step is the daily 'maintenance step'?","Step 10",
+ "¿Cuál es el paso de 'mantenimiento' diario?","Paso 10"],
+["Steps",
+ "What does Step 3 ask members to do?","Turn will and life over to the care of God as they understood Him",
+ "¿Qué pide el Paso 3?","Poner la voluntad y la vida al cuidado de Dios como cada quien lo conciba"],
+["Steps",
+ "Who originally wrote the 12 Steps?","Bill Wilson (Bill W.)",
+ "¿Quién escribió originalmente los 12 Pasos?","Bill Wilson (Bill W.)"],
+["Steps",
+ "Complete: 'We admitted we were ___ over alcohol.'","Powerless",
+ "Completa: 'Admitimos que éramos ___ ante el alcohol.'","Impotentes"],
+
+// ── 12 TRADITIONS (15) ──
+["Traditions",
+ "How many traditions does AA have?","12",
+ "¿Cuántas tradiciones tiene AA?","12"],
+["Traditions",
+ "What is Tradition 1 about?","Common welfare — unity comes first",
+ "¿De qué trata la Tradición 1?","El bienestar común — la unidad es lo primero"],
+["Traditions",
+ "What does Tradition 3 say about membership?","The only requirement is a desire to stop drinking",
+ "¿Qué dice la Tradición 3 sobre la membresía?","El único requisito es un deseo de dejar de beber"],
+["Traditions",
+ "What is Tradition 5 about?","Each group's primary purpose: carry the message",
+ "¿De qué trata la Tradición 5?","El propósito primordial de cada grupo: llevar el mensaje"],
+["Traditions",
+ "What does Tradition 7 emphasize?","Every AA group should be fully self-supporting",
+ "¿Qué enfatiza la Tradición 7?","Cada grupo de AA debe ser completamente autosuficiente"],
+["Traditions",
+ "What is Tradition 10 about?","AA has no opinion on outside issues",
+ "¿De qué trata la Tradición 10?","AA no tiene opinión sobre asuntos ajenos"],
+["Traditions",
+ "What does Tradition 11 say?","Public relations based on attraction rather than promotion",
+ "¿Qué dice la Tradición 11?","Relaciones públicas basadas en la atracción más que en la promoción"],
+["Traditions",
+ "What is Tradition 12 about?","Anonymity is the spiritual foundation",
+ "¿De qué trata la Tradición 12?","El anonimato es la base espiritual"],
+["Traditions",
+ "What does Tradition 2 describe?","A loving God as expressed in group conscience",
+ "¿Qué describe la Tradición 2?","Un Dios amoroso tal como se exprese en la conciencia de grupo"],
+["Traditions",
+ "What does Tradition 4 allow?","Each group to be autonomous except in matters affecting AA as a whole",
+ "¿Qué permite la Tradición 4?","Cada grupo es autónomo excepto en asuntos que afecten a AA en su totalidad"],
+["Traditions",
+ "What does Tradition 6 warn against?","Lending the AA name to outside enterprises",
+ "¿Contra qué advierte la Tradición 6?","Prestar el nombre de AA a empresas ajenas"],
+["Traditions",
+ "What does Tradition 8 state?","AA should remain forever nonprofessional",
+ "¿Qué establece la Tradición 8?","AA nunca debe tener carácter profesional"],
+["Traditions",
+ "What does Tradition 9 say?","AA ought never be organized but may create service boards",
+ "¿Qué dice la Tradición 9?","AA no debe organizarse nunca pero puede crear juntas de servicio"],
+["Traditions",
+ "Tradition 12 mentions anonymity at what level?","Press, radio, and films",
+ "¿La Tradición 12 menciona el anonimato a qué nivel?","Prensa, radio y cine"],
+["Traditions",
+ "What is the spiritual foundation in Tradition 12?","Anonymity",
+ "¿Cuál es la base espiritual en la Tradición 12?","El anonimato"],
+
+// ── BIG BOOK (15) ──
+["Big Book",
+ "What is the official title of the 'Big Book'?","Alcoholics Anonymous",
+ "¿Cuál es el título oficial del 'Libro Grande'?","Alcohólicos Anónimos"],
+["Big Book",
+ "What year was the Big Book first published?","1939",
+ "¿En qué año se publicó por primera vez el Libro Grande?","1939"],
+["Big Book",
+ "Who was the primary author of the Big Book?","Bill Wilson",
+ "¿Quién fue el autor principal del Libro Grande?","Bill Wilson"],
+["Big Book",
+ "Which chapter is for non-believers?","Chapter 4: We Agnostics",
+ "¿Qué capítulo es para los no creyentes?","Capítulo 4: Nosotros los Agnósticos"],
+["Big Book",
+ "Which chapter contains 'How It Works'?","Chapter 5",
+ "¿Qué capítulo contiene 'Cómo Funciona'?","Capítulo 5"],
+["Big Book",
+ "What is Chapter 8 titled?","To Wives",
+ "¿Cómo se titula el Capítulo 8?","A las Esposas"],
+["Big Book",
+ "How many editions of the Big Book exist?","Four (1939, 1955, 1976, 2001)",
+ "¿Cuántas ediciones del Libro Grande existen?","Cuatro (1939, 1955, 1976, 2001)"],
+["Big Book",
+ "First sentence of 'How It Works'?","Rarely have we seen a person fail...",
+ "¿Primera frase de 'Cómo Funciona'?","Rara vez hemos visto fracasar a una persona..."],
+["Big Book",
+ "Has the Big Book been translated into 70+ languages?","Yes",
+ "¿Se ha traducido el Libro Grande a más de 70 idiomas?","Sí"],
+["Big Book",
+ "What chapter discusses 'Working with Others'?","Chapter 7",
+ "¿Qué capítulo habla de 'Trabajando con los Demás'?","Capítulo 7"],
+["Big Book",
+ "How many pages is the main text?","164 pages",
+ "¿Cuántas páginas tiene el texto principal?","164 páginas"],
+["Big Book",
+ "What is the 'Doctor's Opinion'?","A letter from Dr. Silkworth explaining alcoholism",
+ "¿Qué es la 'Opinión del Médico'?","Una carta del Dr. Silkworth explicando el alcoholismo"],
+["Big Book",
+ "'Alcoholics Anonymous' refers to what?","Both the fellowship and the book",
+ "¿A qué se refiere 'Alcohólicos Anónimos'?","Tanto a la comunidad como al libro"],
+["Big Book",
+ "Which chapter is 'The Family Afterward'?","Chapter 9",
+ "¿Qué capítulo es 'La Familia Después'?","Capítulo 9"],
+["Big Book",
+ "Which chapter is titled 'Into Action'?","Chapter 6",
+ "¿Qué capítulo se titula 'En Acción'?","Capítulo 6"],
+
+// ── CULTURE (10) ──
+["Culture",
+ "What is the Serenity Prayer?","God, grant me the serenity to accept the things I cannot change, courage to change the things I can, and wisdom to know the difference.",
+ "¿Qué es la Oración de la Serenidad?","Dios, concédeme la serenidad para aceptar las cosas que no puedo cambiar, valor para cambiar las que sí puedo, y sabiduría para conocer la diferencia."],
+["Culture",
+ "What does 'One Day at a Time' mean?","Focus on staying sober just for today",
+ "¿Qué significa 'Un Día a la Vez'?","Enfocarse en mantenerse sobrio solo por hoy"],
+["Culture",
+ "What is a 'home group'?","A member's primary AA group",
+ "¿Qué es un 'grupo base'?","El grupo principal de AA de un miembro"],
+["Culture",
+ "What is a sponsor?","An experienced member who guides another through the steps",
+ "¿Qué es un padrino o madrina?","Un miembro experimentado que guía a otro a través de los pasos"],
+["Culture",
+ "What is a 'group conscience'?","The collective decision of group members",
+ "¿Qué es una 'conciencia de grupo'?","La decisión colectiva de los miembros del grupo"],
+["Culture",
+ "What are AA chips or medallions?","Tokens marking sobriety milestones",
+ "¿Qué son las fichas o medallones de AA?","Fichas que marcan hitos de sobriedad"],
+["Culture",
+ "What is an 'open meeting'?","A meeting anyone can attend",
+ "¿Qué es una 'reunión abierta'?","Una reunión a la que cualquiera puede asistir"],
+["Culture",
+ "What is a 'closed meeting'?","Only for those with a desire to stop drinking",
+ "¿Qué es una 'reunión cerrada'?","Solo para quienes desean dejar de beber"],
+["Culture",
+ "What does 'Keep Coming Back' mean?","Encouragement to continue attending meetings",
+ "¿Qué significa 'Sigue Viniendo'?","Ánimo para seguir asistiendo a las reuniones"],
+["Culture",
+ "What does 'Easy Does It' mean?","Take things slowly and calmly",
+ "¿Qué significa 'Poco a Poco'?","Tomar las cosas con calma"],
+
+// ── SERVICE (5) ──
+["Service",
+ "What is the Responsibility Declaration?","When anyone reaches out for help, I want the hand of AA always to be there. And for that: I am responsible.",
+ "¿Cuál es la Declaración de Responsabilidad?","Cuando cualquiera, dondequiera, extienda su mano pidiendo ayuda, quiero que la mano de AA esté siempre allí. Y por eso: Yo soy responsable."],
+["Service",
+ "What are the Three Legacies of AA?","Recovery, Unity, and Service",
+ "¿Cuáles son los Tres Legados de AA?","Recuperación, Unidad y Servicio"],
+["Culture",
+ "What does the circle and triangle represent?","Unity, Service, and Recovery",
+ "¿Qué representa el círculo y triángulo?","Unidad, Servicio y Recuperación"],
+["Culture",
+ "What is the primary purpose of every AA group?","To carry its message to the alcoholic who still suffers",
+ "¿Cuál es el propósito primordial de cada grupo de AA?","Llevar su mensaje al alcohólico que aún sufre"],
+["Culture",
+ "What does 'First Things First' mean?","Prioritize sobriety above all else",
+ "¿Qué significa 'Primero lo Primero'?","Priorizar la sobriedad por encima de todo"],
+["Culture",
+ "What color is the 24-hour sobriety chip?","White or silver (varies by area)",
+ "¿De qué color es la ficha de sobriedad de 24 horas?","Blanca o plateada (varía según el área)"],
+["Service",
+ "What is the General Service Conference?","AA's annual meeting where group conscience guides policy",
+ "¿Qué es la Conferencia de Servicios Generales?","La reunión anual de AA donde la conciencia de grupo guía las políticas"],
+["Service",
+ "How many Concepts for World Service?","12",
+ "¿Cuántos Conceptos para el Servicio Mundial hay?","12"],
+["Culture",
+ "What does 'HOW' stand for?","Honesty, Open-mindedness, Willingness",
+ "¿Qué significa 'HOW' en AA?","Honestidad, Apertura mental, Buena voluntad"],
+["Culture",
+ "What is the AA daily meditation book?","Daily Reflections",
+ "¿Cuál es el libro de meditación diaria de AA?","Reflexiones Diarias"]
+];
+
+// ── INSPIRATIONAL QUOTES [en, es, attribution] ──────────────────────────────
+const quotes = [
+["One day at a time.",
+ "Un día a la vez.",
+ "— AA Saying"],
+["Progress, not perfection.",
+ "Progreso, no perfección.",
+ "— Big Book"],
+["It works if you work it.",
+ "Funciona si lo trabajas.",
+ "— AA Saying"],
+["Let go and let God.",
+ "Suelta y deja a Dios.",
+ "— AA Saying"],
+["First things first.",
+ "Primero lo primero.",
+ "— AA Saying"],
+["Easy does it.",
+ "Poco a poco.",
+ "— AA Saying"],
+["Keep coming back — it works!",
+ "Sigue viniendo — ¡funciona!",
+ "— AA Saying"],
+["This too shall pass.",
+ "Esto también pasará.",
+ "— AA Saying"],
+["We are not saints. The point is that we are willing to grow along spiritual lines.",
+ "No somos santos. Lo importante es que estemos dispuestos a crecer espiritualmente.",
+ "— Big Book, Ch. 5"],
+["The only requirement for membership is a desire to stop drinking.",
+ "El único requisito para ser miembro es un deseo de dejar de beber.",
+ "— Tradition 3"],
+["I am responsible. When anyone, anywhere, reaches out for help, I want the hand of AA always to be there.",
+ "Yo soy responsable. Cuando cualquiera, dondequiera, extienda su mano pidiendo ayuda, quiero que la mano de AA esté siempre allí.",
+ "— Responsibility Declaration"],
+["Rarely have we seen a person fail who has thoroughly followed our path.",
+ "Rara vez hemos visto fracasar a una persona que ha seguido concienzudamente nuestro camino.",
+ "— Big Book, Ch. 5"],
+["We will intuitively know how to handle situations which used to baffle us.",
+ "Intuitivamente sabremos cómo manejar situaciones que antes nos desconcertaban.",
+ "— The Promises"],
+["Anonymity is the spiritual foundation of all our traditions.",
+ "El anonimato es la base espiritual de todas nuestras tradiciones.",
+ "— Tradition 12"],
+["The therapeutic value of one alcoholic helping another is without parallel.",
+ "El valor terapéutico de un alcohólico ayudando a otro no tiene paralelo.",
+ "— Dr. Silkworth"],
+["We will not regret the past nor wish to shut the door on it.",
+ "No nos lamentaremos por el pasado ni desearemos cerrar la puerta sobre él.",
+ "— The Promises"],
+["God grant me the serenity to accept the things I cannot change, courage to change the things I can, and wisdom to know the difference.",
+ "Dios, concédeme la serenidad para aceptar las cosas que no puedo cambiar, valor para cambiar las que sí puedo, y sabiduría para conocer la diferencia.",
+ "— Serenity Prayer"],
+["Meeting makers make it.",
+ "Los que asisten a reuniones lo logran.",
+ "— AA Saying"],
+["Gratitude is the attitude.",
+ "La gratitud es la actitud.",
+ "— AA Saying"],
+["Carry the message, not the mess.",
+ "Lleva el mensaje, no el desorden.",
+ "— AA Saying"],
+["What an order! I can't go through with it. — Do not be discouraged.",
+ "¡Qué exigencia! No puedo llegar a tanto. — No te desanimes.",
+ "— Big Book, Ch. 5"],
+["We absolutely insist on enjoying life.",
+ "Insistimos absolutamente en disfrutar de la vida.",
+ "— Big Book, p. 132"],
+["The road to recovery is always under construction.",
+ "El camino a la recuperación siempre está en construcción.",
+ "— AA Saying"],
+["You are not alone.",
+ "No estás solo/a.",
+ "— AA Fellowship"],
+["Surrender to win.",
+ "Rendirse para ganar.",
+ "— AA Saying"]
+];
+
+// ── FUN FACTS [en, es] ──────────────────────────────────────────────────────
+const facts = [
+["The Grapevine has been published continuously since June 1944 — over 80 years!",
+ "El Grapevine se ha publicado continuamente desde junio de 1944 — ¡más de 80 años!"],
+["La Viña, AA's Spanish-language magazine, was first published in 1996.",
+ "La Viña, la revista en español de AA, se publicó por primera vez en 1996."],
+["AA has over 2 million members in approximately 180 countries worldwide.",
+ "AA tiene más de 2 millones de miembros en aproximadamente 180 países."],
+["The Big Book has been translated into over 70 languages.",
+ "El Libro Grande se ha traducido a más de 70 idiomas."],
+["Bill W.'s last drink was on December 11, 1934.",
+ "La última copa de Bill W. fue el 11 de diciembre de 1934."],
+["The Grapevine app is available on both iOS and Android devices.",
+ "La aplicación del Grapevine está disponible en dispositivos iOS y Android."],
+["The name 'Alcoholics Anonymous' was chosen as the title of the Big Book in 1939.",
+ "El nombre 'Alcohólicos Anónimos' fue elegido como título del Libro Grande en 1939."],
+["The first AA group in a prison was established in 1942.",
+ "El primer grupo de AA en una prisión se estableció en 1942."],
+["You can subscribe to the Grapevine digitally at aagrapevine.org.",
+ "Puedes suscribirte al Grapevine digitalmente en aagrapevine.org."],
+["The Carry the Message Project brings AA literature to those who cannot afford it.",
+ "El Proyecto Lleva el Mensaje lleva literatura de AA a quienes no pueden pagarla."],
+["AA's General Service Conference meets annually in New York.",
+ "La Conferencia de Servicios Generales de AA se reúne anualmente en Nueva York."],
+["The Grapevine publishes stories from AA members all around the world.",
+ "El Grapevine publica historias de miembros de AA de todo el mundo."],
+["La Viña is the only Spanish-language AA magazine in the world.",
+ "La Viña es la única revista de AA en español en el mundo."],
+["The 12 Traditions were first published in the Grapevine in 1946.",
+ "Las 12 Tradiciones se publicaron por primera vez en el Grapevine en 1946."],
+["Dr. Bob's sobriety date — June 10, 1935 — is considered AA's founding date.",
+ "La fecha de sobriedad del Dr. Bob — 10 de junio de 1935 — se considera la fecha de fundación de AA."],
+["The Grapevine was originally called 'the international monthly journal of Alcoholics Anonymous.'",
+ "El Grapevine originalmente se llamaba 'la revista mensual internacional de Alcohólicos Anónimos.'"],
+["AA's 12 Concepts for World Service guide AA's service structure globally.",
+ "Los 12 Conceptos para el Servicio Mundial de AA guían la estructura de servicio de AA a nivel global."],
+["The Saturday Evening Post article of 1941 caused AA membership to skyrocket from 2,000 to 8,000.",
+ "El artículo del Saturday Evening Post de 1941 hizo que la membresía de AA se disparara de 2,000 a 8,000."],
+["NETA 65 is the Northeast Texas Area 65 of Alcoholics Anonymous.",
+ "NETA 65 es el Área 65 del Noreste de Texas de Alcohólicos Anónimos."],
+["The Grapevine offers a free podcast with stories of recovery.",
+ "El Grapevine ofrece un podcast gratuito con historias de recuperación."]
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ENGINE
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const $ = id => document.getElementById(id);
+let paused = false, tmr = null, arTmr = null, cdInt = null;
+let lang = 'both'; // 'en', 'es', 'both'
+let interactions = 0;
+const CIRC = 2 * Math.PI * 45; // ~283 for countdown ring
+
+// ── ENTRANCE ANIMATIONS (randomly chosen) ──
+const anims = [
+  'animate__fadeIn','animate__fadeInUp','animate__fadeInDown',
+  'animate__zoomIn','animate__fadeInLeft','animate__fadeInRight'
+];
+function randAnim(){ return 'animate__animated ' + anims[Math.floor(Math.random() * anims.length)]; }
+
+// ── SHUFFLE (Fisher-Yates) ──
+function shuffle(arr){
+  const a = [...arr];
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ── DECKS (no repeats until all items shown) ──
+const originals = { img: images, yt: ytVids, vid: localVids, pdf: pdfs, tri: trivia, quote: quotes, fact: facts };
+const decks = {};
+function initDecks(){
+  for(const k in originals) decks[k] = shuffle(originals[k]);
+}
+function draw(type){
+  if(!decks[type] || !decks[type].length) decks[type] = shuffle(originals[type]);
+  return decks[type].pop();
+}
+initDecks();
+
+// ── HISTORY (ring buffer of last 12 slides) ──
+const HIST_MAX = 12;
+const hist = [];   // [{type, data, revealed}] newest at end
+let histPos = -1;  // -1 = live (newest), 0..length-1 = browsing
+
+function pushHist(type, data){
+  // Only push when in live mode (not replaying history)
+  if(histPos >= 0) return;
+  hist.push({type: type, data: data, revealed: false});
+  if(hist.length > HIST_MAX) hist.shift();
+  updateHistUI();
+}
+
+function updateHistUI(){
+  const btn = $('prevBtn');
+  const ind = $('hist-ind');
+  if(hist.length <= 1 && histPos < 0){
+    btn.disabled = true;
+    ind.textContent = '';
+  } else if(histPos >= 0){
+    btn.disabled = histPos <= 0;
+    ind.textContent = (histPos + 1) + '/' + hist.length;
+  } else {
+    btn.disabled = hist.length <= 1 ? true : false;
+    ind.textContent = '';
+  }
+}
+
+// ── UI HELPERS ──
+function hideAll(){
+  document.querySelectorAll('.slide').forEach(s => {
+    s.classList.remove('on');
+    s.className = 'slide';
+  });
+  $('syt').src = '';
+  const v = $('svid'); v.pause(); v.removeAttribute('src');
+  $('cap').textContent = '';
+  clearTimeout(arTmr);
+  clearInterval(cdInt);
+}
+
+function showSlide(id){
+  const el = $(id);
+  el.className = 'slide on ' + randAnim();
+}
+
+function prog(ms){
+  const p = $('prog');
+  p.style.transition = 'none'; p.style.width = '0';
+  requestAnimationFrame(() => { p.style.transition = 'width ' + ms + 'ms linear'; p.style.width = '100vw'; });
+}
+
+function sched(ms){ prog(ms); if(!paused) tmr = setTimeout(next, ms); }
+
+function langVis(en, es){
+  if(lang === 'en') return en ? '' : 'none';
+  if(lang === 'es') return es ? '' : 'none';
+  return '';
+}
+
+function updateInteractions(){
+  interactions++;
+  $('interact-count').textContent = interactions + ' interactions today';
+}
+
+// ── COUNTDOWN TIMER ──
+function startCountdown(seconds){
+  const ring = $('cd-ring');
+  const num = $('cd-num');
+  ring.style.transition = 'none';
+  ring.style.strokeDashoffset = '0';
+  num.textContent = seconds;
+  requestAnimationFrame(() => {
+    ring.style.transition = 'stroke-dashoffset ' + seconds + 's linear';
+    ring.style.strokeDashoffset = CIRC;
+  });
+  let rem = seconds;
+  clearInterval(cdInt);
+  cdInt = setInterval(() => {
+    rem--;
+    num.textContent = Math.max(0, rem);
+    if(rem <= 0) clearInterval(cdInt);
+  }, 1000);
+}
+
+// ── CONFETTI ──
+function confetti(){
+  const colors = ['#f0c040','#ff6b6b','#4ecdc4','#fff','#a855f7','#3b82f6','#f97316'];
+  for(let i = 0; i < 50; i++){
+    const el = document.createElement('div');
+    el.className = 'cft';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+    el.style.animationDelay = Math.random() * 0.6 + 's';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    const size = Math.random() * 8 + 5;
+    el.style.width = size + 'px';
+    el.style.height = size + 'px';
+    el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 4500);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// SLIDE SHOW FUNCTIONS  (each accepts optional replay data)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function showImg(replay){
+  hideAll();
+  const src = replay || draw('img');
+  $('simg').onload = function(){ showSlide('s-img'); sched(DUR.img); };
+  $('simg').onerror = function(){ next(); };
+  $('simg').src = encodeURI(src);
+  $('cap').textContent = src.split('/').pop().replace(/\.\w+$/, '');
+  if(!replay){ pushHist('img', src); (new Image()).src = encodeURI(images[Math.floor(Math.random()*images.length)]); }
+  updateHistUI();
+}
+
+function showYT(replay){
+  hideAll();
+  const v = replay || draw('yt');
+  const yt = $('syt');
+  yt.className = v.s ? 'yt-p' : 'yt-l';
+  yt.src = 'https://www.youtube.com/embed/' + v.id + '?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=' + v.id;
+  showSlide('s-yt');
+  $('cap').textContent = v.t;
+  sched(v.s ? DUR.yts : DUR.yt);
+  if(!replay) pushHist('yt', v);
+  updateHistUI();
+}
+
+function showVid(replay){
+  hideAll();
+  const src = replay || draw('vid');
+  const v = $('svid');
+  v.src = encodeURI(src);
+  v.play().catch(function(){});
+  showSlide('s-vid');
+  $('cap').textContent = 'Video';
+  v.onended = function(){ if(!paused) next(); };
+  sched(DUR.vid);
+  if(!replay) pushHist('vid', src);
+  updateHistUI();
+}
+
+function showTri(replay, forceReveal){
+  hideAll();
+  const t = replay || draw('tri');
+  // category
+  $('tcat').textContent = t[0];
+  $('tcat').style.display = langVis(true, false);
+  $('tcat-es').textContent = catES[t[0]] || t[0];
+  $('tcat-es').style.display = langVis(false, true);
+  // questions
+  $('tq-en').textContent = t[1];
+  $('tq-en').style.display = langVis(true, false);
+  $('tq-en').className = 'tri-q ' + randAnim();
+  $('tq-es').textContent = t[3];
+  $('tq-es').style.display = langVis(false, true);
+  $('tq-es').className = 'tri-q-es ' + randAnim();
+  // answers
+  $('ta-en').textContent = t[2];
+  $('ta-en').style.display = langVis(true, false);
+  $('ta-es').textContent = t[4];
+  $('ta-es').style.display = langVis(false, true);
+
+  if(forceReveal){
+    // Replaying already-revealed trivia — show answer immediately
+    $('ta-en').className = 'tri-a show';
+    $('ta-es').className = 'tri-a-es show';
+    $('rbtn').style.display = 'none';
+    $('tri-cd').style.display = 'none';
+  } else {
+    $('ta-en').className = 'tri-a';
+    $('ta-es').className = 'tri-a-es';
+    $('rbtn').style.display = '';
+    $('tri-cd').style.display = '';
+    const cdSec = Math.round(DUR.tri / 1000);
+    startCountdown(cdSec);
+    arTmr = setTimeout(reveal, (cdSec - 3) * 1000);
+  }
+  showSlide('s-tri');
+  sched(DUR.tri);
+  if(!replay) pushHist('tri', t);
+  updateHistUI();
+}
+
+function showQuote(replay){
+  hideAll();
+  const q = replay || draw('quote');
+  $('q-en').textContent = q[0];
+  $('q-en').style.display = langVis(true, false);
+  $('q-en').className = 'quote-en ' + randAnim();
+  $('q-es').textContent = q[1];
+  $('q-es').style.display = langVis(false, true);
+  $('q-es').className = 'quote-es ' + randAnim();
+  $('q-attr').textContent = q[2];
+  showSlide('s-quote');
+  sched(DUR.quote);
+  if(!replay) pushHist('quote', q);
+  updateHistUI();
+}
+
+function showFact(replay){
+  hideAll();
+  const f = replay || draw('fact');
+  $('f-en').textContent = f[0];
+  $('f-en').style.display = langVis(true, false);
+  $('f-en').className = 'fact-en ' + randAnim();
+  $('f-es').textContent = f[1];
+  $('f-es').style.display = langVis(false, true);
+  $('f-es').className = 'fact-es ' + randAnim();
+  showSlide('s-fact');
+  sched(DUR.fact);
+  if(!replay) pushHist('fact', f);
+  updateHistUI();
+}
+
+function showPdf(replay){
+  hideAll();
+  const p = replay || draw('pdf');
+  $('spdf').src = encodeURI(p.f) + '#toolbar=0&view=FitH';
+  showSlide('s-pdf');
+  $('cap').textContent = p.t;
+  sched(DUR.pdf);
+  if(!replay) pushHist('pdf', p);
+  updateHistUI();
+}
+
+// ── REPLAY A HISTORY ENTRY ──
+function replayEntry(entry){
+  switch(entry.type){
+    case 'img':   showImg(entry.data);   break;
+    case 'yt':    showYT(entry.data);    break;
+    case 'vid':   showVid(entry.data);   break;
+    case 'tri':   showTri(entry.data, entry.revealed); break;
+    case 'quote': showQuote(entry.data); break;
+    case 'fact':  showFact(entry.data);  break;
+    case 'pdf':   showPdf(entry.data);   break;
+    default:      showImg(entry.data);
+  }
+}
+
+// ── REVEAL ANSWER ──
+function reveal(){
+  $('ta-en').className = 'tri-a show ' + (lang !== 'es' ? 'animate__animated animate__bounceIn' : '');
+  $('ta-es').className = 'tri-a-es show ' + (lang !== 'en' ? 'animate__animated animate__bounceIn' : '');
+  $('rbtn').style.display = 'none';
+  $('tri-cd').style.display = 'none';
+  clearTimeout(arTmr);
+  clearInterval(cdInt);
+  confetti();
+  updateInteractions();
+  // Mark revealed in history so replaying shows the answer
+  const idx = histPos >= 0 ? histPos : hist.length - 1;
+  if(idx >= 0 && hist[idx] && hist[idx].type === 'tri') hist[idx].revealed = true;
+}
+
+// ── NAVIGATION ──
+function prev(){
+  clearTimeout(tmr);
+  clearTimeout(arTmr);
+  clearInterval(cdInt);
+  if(hist.length <= 1) return;
+  if(histPos < 0){
+    // Currently live — jump to second-to-last (the one before current)
+    histPos = hist.length - 2;
+  } else if(histPos > 0){
+    histPos--;
+  } else {
+    return; // already at oldest
+  }
+  replayEntry(hist[histPos]);
+}
+
+function next(){
+  clearTimeout(tmr);
+  clearTimeout(arTmr);
+  clearInterval(cdInt);
+
+  // If browsing history, step forward
+  if(histPos >= 0){
+    if(histPos < hist.length - 1){
+      histPos++;
+      replayEntry(hist[histPos]);
+      // If we've returned to the newest, go back to live mode
+      if(histPos === hist.length - 1) histPos = -1;
+      return;
+    }
+    // At the end of history — go live
+    histPos = -1;
+  }
+
+  // Live mode — pick new random content
+  const r = Math.random();
+  let cum = 0;
+  const types = Object.keys(WEIGHTS);
+  for(const type of types){
+    cum += WEIGHTS[type];
+    if(r < cum){
+      switch(type){
+        case 'img':   showImg();   return;
+        case 'tri':   showTri();   return;
+        case 'yt':    showYT();    return;
+        case 'quote': showQuote(); return;
+        case 'fact':  showFact();  return;
+        case 'pdf':   showPdf();   return;
+        case 'vid':   showVid();   return;
+      }
+    }
+  }
+  showImg();
+}
+
+// ── CONTROLS ──
+function pp(){
+  paused = !paused;
+  $('ppb').innerHTML = paused ? '&#x25B6; Play' : '&#x23F8; Pause';
+  $('pind').style.display = paused ? 'block' : 'none';
+  if(paused) clearTimeout(tmr);
+  else next();
+}
+
+function goFS(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function(){});
+  else document.exitFullscreen();
+}
+
+function cycleLang(){
+  if(lang === 'both') lang = 'en';
+  else if(lang === 'en') lang = 'es';
+  else lang = 'both';
+  const labels = { both: 'EN/ES', en: 'EN', es: 'ES' };
+  $('langBtn').textContent = labels[lang];
+  $('langBtn').classList.toggle('active', lang !== 'both');
+}
+
+// ── KEYBOARD SHORTCUTS ──
+document.addEventListener('keydown', function(e){
+  if(e.code === 'Space'){ e.preventDefault(); pp(); }
+  if(e.code === 'ArrowRight' || e.code === 'Enter') next();
+  if(e.code === 'ArrowLeft') prev();
+  if(e.code === 'KeyF') goFS();
+  if(e.code === 'KeyL') cycleLang();
+  if(e.code === 'KeyR'){
+    const triSlide = $('s-tri');
+    if(triSlide.classList.contains('on')) reveal();
+  }
+});
+
+// ── START ──
+next();
+</script>
+</body>
+</html>
