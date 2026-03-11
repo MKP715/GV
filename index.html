@@ -41,9 +41,6 @@ box-shadow:0 0 60px rgba(240,192,64,.2)}
 #svid{max-width:88vw;max-height:calc(100vh - 136px);border-radius:10px;
 box-shadow:0 0 60px rgba(240,192,64,.2)}
 
-/* ── PDF SLIDE ── */
-#spdf{width:84vw;height:calc(100vh - 136px);border:none;border-radius:10px}
-
 /* ── TRIVIA SLIDE ── */
 #s-tri{text-align:center;padding:40px 60px;gap:8px}
 #tcat{color:#f0c040;font-size:18px;text-transform:uppercase;letter-spacing:4px}
@@ -113,7 +110,6 @@ text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 100%{top:110vh;opacity:0;transform:rotate(720deg) scale(.3)}}
 
 /* ── ENTRANCE ANIMATIONS ── */
-.anim-enter{animation-duration:.6s;animation-fill-mode:both}
 </style>
 </head>
 <body>
@@ -153,7 +149,6 @@ text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   <div id="ta-en" class="tri-a"></div>
   <div id="ta-es" class="tri-a-es"></div>
 </div>
-<div id="s-pdf" class="slide"><iframe id="spdf"></iframe></div>
 <div id="s-quote" class="slide">
   <div class="quote-icon">&ldquo;</div>
   <div id="q-en" class="quote-en"></div>
@@ -186,74 +181,84 @@ const DUR = {
   yts:    28000,  // youtube short
   vid:    60000,  // local video fallback timeout
   tri:    18000,  // trivia total time
-  pdf:    12000,  // pdf display time
   quote:  10000,  // quote display time
   fact:   10000   // fun fact display time
 };
 
 // Content type weights (must sum to 1.0)
 const WEIGHTS = {
-  img:   0.30,
+  img:   0.32,
   tri:   0.25,
   yt:    0.15,
   quote: 0.12,
-  fact:  0.08,
-  pdf:   0.06,
-  vid:   0.04
+  fact:  0.10,
+  vid:   0.06
 };
 
 // ── IMAGE ARRAYS ─────────────────────────────────────────────────────────────
-const _W = 'WhatsApp/WhatsApp Image 2026-02-19 at ';
-const waImg = [
-'6.33.16 PM','6.33.20 PM','6.33.34 PM','6.33.35 PM','6.33.36 PM',
-'6.35.54 PM (1)','6.35.54 PM','6.35.55 PM',
-'6.36.26 PM (1)','6.36.26 PM (2)','6.36.26 PM (3)','6.36.26 PM',
-'6.36.47 PM','6.36.49 PM','6.36.54 PM','6.42.36 PM','6.49.51 PM',
-'6.50.31 PM','6.50.32 PM','6.50.35 PM','6.50.37 PM','6.51.17 PM','6.53.32 PM',
-'6.55.29 PM (1)','6.55.29 PM',
-'6.58.47 PM (1)','6.58.47 PM','6.58.48 PM','6.58.49 PM (1)','6.58.49 PM','6.58.50 PM',
-'6.58.59 PM','6.59.00 PM','6.59.28 PM','6.59.52 PM',
-'6.59.53 PM (1)','6.59.53 PM (2)','6.59.53 PM','6.59.54 PM',
-'7.00.00 PM (1)','7.00.00 PM','7.00.01 PM','7.00.05 PM','7.00.06 PM',
-'7.02.24 PM','7.03.24 PM','7.03.25 PM','7.03.26 PM','7.03.27 PM','7.03.33 PM',
-'7.03.35 PM (1)','7.03.35 PM','7.03.36 PM','7.03.38 PM','7.03.39 PM (1)','7.03.39 PM',
-'7.06.04 PM (1)','7.06.04 PM','7.06.05 PM (1)','7.06.05 PM',
-'7.06.06 PM','7.06.07 PM','7.06.08 PM',
-'7.06.13 PM (1)','7.06.13 PM (2)','7.06.13 PM','7.06.14 PM',
-'7.06.15 PM (1)','7.06.15 PM','7.06.17 PM','7.06.18 PM',
-'7.06.19 PM (1)','7.06.19 PM (2)','7.06.19 PM (3)','7.06.19 PM','7.06.23 PM',
-'7.07.44 PM (1)','7.07.44 PM','7.07.45 PM (1)','7.07.45 PM',
-'7.18.07 PM','7.18.08 PM (1)','7.18.08 PM','7.18.09 PM (1)','7.18.09 PM',
-'7.18.10 PM (1)','7.18.10 PM (2)','7.18.10 PM (3)','7.18.10 PM',
-'7.18.11 PM (1)','7.18.11 PM (2)','7.18.11 PM',
-'7.38.54 PM (1)','7.38.54 PM (2)','7.38.54 PM (3)','7.38.54 PM (4)',
-'7.38.54 PM (5)','7.38.54 PM (6)','7.38.54 PM (7)','7.38.54 PM',
-'7.38.55 PM (1)','7.38.55 PM (2)','7.38.55 PM (3)','7.38.55 PM',
-'7.38.56 PM (1)','7.38.56 PM (2)','7.38.56 PM (3)','7.38.56 PM (4)','7.38.56 PM',
-'7.39.17 PM (1)','7.39.17 PM',
-'7.39.18 PM (1)','7.39.18 PM (2)','7.39.18 PM (3)','7.39.18 PM (4)',
-'7.39.18 PM (5)','7.39.18 PM (6)','7.39.18 PM',
-'7.39.19 PM (1)','7.39.19 PM (2)','7.39.19 PM (3)','7.39.19 PM (4)','7.39.19 PM (5)','7.39.19 PM'
-].map(t => _W + t + '.jpeg');
-
-const emailImg = [
-'Email/Apps.jpeg','Email/Audiobook.jpg','Email/Carry the message.jpeg',
-'Email/Catalog.jpeg','Email/Free materials.jpeg','Email/Online free Resources.jpeg',
-'Email/Podcast.jpeg','Email/wrong size Taller de escritura La Vina El Ultimo Refugio (2).png',
-'Email/Youtube.jpeg'
+// QR Codes — subscription, apps, catalog, resources
+const qrImg = [
+'images/qr-codes/qr-apps.jpeg','images/qr-codes/qr-audiobook.jpg',
+'images/qr-codes/qr-carry-the-message.jpeg','images/qr-codes/qr-catalog.jpeg',
+'images/qr-codes/qr-free-materials.jpeg','images/qr-codes/qr-online-resources.jpeg',
+'images/qr-codes/qr-podcast.jpeg','images/qr-codes/qr-youtube.jpeg'
 ];
 
-const _G = 'Published authors 2025 - GV/';
-const gvImg = ['GV July.jpg','GV October .jpg','January GV.jpg','January.jpg',
-'July - A Vision for Me.jpg','July -Tradirion 7.jpg','October.jpg'].map(f => _G + f);
+// Magazine Covers — GV and La Viña 2025
+const coverImg = [
+'images/covers/cover-gv-feb-2025.jpg','images/covers/cover-gv-jan-2025b.jpg',
+'images/covers/cover-gv-jul-2025.jpg','images/covers/cover-gv-oct-2025.jpg',
+'images/covers/cover-lv-jan-feb-2025.png','images/covers/cover-lv-jul-aug-2025.jpg',
+'images/covers/cover-lv-nov-dec-2025.jpg','images/covers/cover-lv-sep-oct-2025.jpg',
+'images/covers/cover-lv-mar-apr-2025.png'
+];
 
-const _L = 'Published authors La Vina Panel 75 - 2025/';
-const lvImg = ['Enero  Febrero - Mi Fuente de Vida.jpg','Enero  Febrero LV.png',
-'Júlio  Agosto LV.jpg','Marzo  Abril - Alteuismo.jpg','Marzo  Abril - Listo.jpg',
-'Nov  Dec Autonomia - Nadja F.jpg','November  December - Jorge .jpg',
-'November  December 2025.jpg','Septiembre  Octubre LV.jpg'].map(f => _L + f);
+// Promotional graphics — subscription prices, apps, social media
+const promoImg = [
+'images/promo/promo-subscription-prices.png','images/promo/promo-podcast-2026.png',
+'images/promo/promo-instagram-2026.png','images/promo/promo-youtube-2026.png',
+'images/promo/promo-free-on-the-inside.png','images/promo/promo-insta-lv.jpg',
+'images/promo/promo-podcast.jpg',
+'images/promo/1es.jpeg','images/promo/1en.jpeg'
+];
 
-const images = [...waImg, ...emailImg, ...gvImg, ...lvImg];
+// Published authors — GV and La Viña 2025 article pages
+const authorImg = [
+'images/authors/author-gv-jan-article.jpg','images/authors/author-gv-jul-vision-for-me.jpg',
+'images/authors/author-gv-jul-tradition-7.jpg','images/authors/author-gv-oct-article.jpg',
+'images/authors/author-lv-jan-feb-fuente-de-vida.jpg',
+'images/authors/author-lv-jan-feb-obstinacion.png',
+'images/authors/author-lv-jul-aug-advertencia.jpeg','images/authors/author-lv-jul-aug-mascara.jpeg',
+'images/authors/author-lv-mar-apr-altruismo.jpg','images/authors/author-lv-mar-apr-listo.jpg',
+'images/authors/author-lv-nov-dec-autonomia.jpg','images/authors/author-lv-nov-dec-jorge.jpg',
+'images/authors/author-lv-sep-1.jpeg','images/authors/author-lv-sep-2.jpeg',
+'images/authors/author-lv-sep-3.jpeg','images/authors/author-lv-sep-4.jpeg',
+'images/authors/author-lv-sep-5.jpeg'
+];
+
+// GV Books — photos of Grapevine and La Viña publications
+const bookImg = [
+'images/books/book-01.png','images/books/book-02.png','images/books/book-03.png',
+'images/books/book-04.png','images/books/book-05.jpg','images/books/book-06.jpg',
+'images/books/book-07.png','images/books/book-08.png','images/books/book-09.png',
+'images/books/book-10.png','images/books/book-11.jpg','images/books/book-12.png',
+'images/books/book-13.jpg','images/books/book-15.jpg',
+'images/books/book-16.jpg','images/books/book-17.jpg','images/books/book-18.jpg',
+'images/books/book-19.png','images/books/book-21.jpg',
+'images/books/book-22.png','images/books/book-23.png','images/books/book-24.jpg',
+'images/books/book-25.png'
+];
+
+// PDF pages — extracted from Carry the Message, Podcast, App Flyer, Postcard
+const pdfPageImg = [
+'images/pdf-pages/carry-the-message.png','images/pdf-pages/podcast.png',
+'images/pdf-pages/gv-app-flyer.png','images/pdf-pages/postcard-home-group.png'
+];
+
+// Booth event photos — quality-filtered (≥60KB, no duplicates)
+const boothImg = Array.from({length:101}, (_,i) => `images/booth/booth-${String(i+1).padStart(3,'0')}.jpeg`);
+
+const images = [...qrImg, ...coverImg, ...promoImg, ...authorImg, ...bookImg, ...pdfPageImg, ...boothImg];
 
 // ── YOUTUBE VIDEOS ───────────────────────────────────────────────────────────
 // {id: YouTube video ID, t: title, s: 1=short/vertical 0=landscape}
@@ -271,28 +276,19 @@ const ytVids = [
 
 // ── LOCAL VIDEOS ─────────────────────────────────────────────────────────────
 const localVids = [
-'WhatsApp/WhatsApp Video 2026-02-19 at 6.14.06 PM.mp4',
-'WhatsApp/WhatsApp Video 2026-02-19 at 7.38.57 PM.mp4'
-];
-
-// ── PDFs ─────────────────────────────────────────────────────────────────────
-const pdfs = [
-{f:'Email/CARRY THE MESSAGE.pdf', t:'Carry the Message / Lleva el Mensaje'},
-{f:'Email/PODCAST.pdf', t:'Podcast'},
-{f:'Email/PODCAST (2).pdf', t:'Podcast (2)'}
+'images/videos/video-booth-01.mp4',
+'images/videos/video-booth-02.mp4'
 ];
 
 // ── TRIVIA [category_en, q_en, a_en, q_es, a_es] ───────────────────────────
-// Category translations: History=Historia, Grapevine=Grapevine, La Viña=La Viña,
-// Steps=Pasos, Traditions=Tradiciones, Big Book=Libro Grande, Culture=Cultura, Service=Servicio
+// Category translations
 const catES = {
   'History':'Historia','Grapevine':'Grapevine','La Viña':'La Viña',
-  'Steps':'Pasos','Traditions':'Tradiciones','Big Book':'Libro Grande',
-  'Culture':'Cultura','Service':'Servicio'
+  'Culture':'Cultura','Service':'Servicio','Subscribe':'Suscríbete'
 };
 
 const trivia = [
-// ── HISTORY (20) ──
+// ── AA HISTORY ──
 ["History",
  "What year was Alcoholics Anonymous founded?","1935",
  "¿En qué año se fundó Alcohólicos Anónimos?","1935"],
@@ -303,58 +299,16 @@ const trivia = [
  "In what city was AA born?","Akron, Ohio",
  "¿En qué ciudad nació AA?","Akron, Ohio"],
 ["History",
- "What is the exact founding date of AA?","June 10, 1935",
- "¿Cuál es la fecha exacta de fundación de AA?","10 de junio de 1935"],
-["History",
- "What spiritual movement influenced AA's early development?","The Oxford Group",
- "¿Qué movimiento espiritual influyó en el desarrollo temprano de AA?","El Grupo Oxford"],
-["History",
- "What hospital was Bill W. treated at before getting sober?","Towns Hospital, New York City",
- "¿En qué hospital fue tratado Bill W. antes de lograr la sobriedad?","Hospital Towns, Ciudad de Nueva York"],
-["History",
- "Who carried the message of sobriety to Bill W.?","Ebby Thacher (Ebby T.)",
- "¿Quién llevó el mensaje de sobriedad a Bill W.?","Ebby Thacher (Ebby T.)"],
-["History",
- "What was Dr. Bob's profession?","Surgeon / Physician",
- "¿Cuál era la profesión del Dr. Bob?","Cirujano / Médico"],
-["History",
- "What year did Dr. Bob pass away?","1950",
- "¿En qué año falleció el Dr. Bob?","1950"],
-["History",
- "What year did Bill W. pass away?","1971",
- "¿En qué año falleció Bill W.?","1971"],
-["History",
- "What was the name of Bill W.'s wife?","Lois Wilson",
- "¿Cómo se llamaba la esposa de Bill W.?","Lois Wilson"],
-["History",
- "What organization did Lois Wilson co-found?","Al-Anon Family Groups",
- "¿Qué organización cofundó Lois Wilson?","Grupos de Familia Al-Anon"],
-["History",
- "In what decade did AA begin?","The 1930s",
- "¿En qué década comenzó AA?","La década de 1930"],
-["History",
- "How many members did AA have by 1939?","About 100",
- "¿Cuántos miembros tenía AA en 1939?","Alrededor de 100"],
-["History",
- "What 1941 article boosted AA membership?","A Saturday Evening Post article by Jack Alexander",
- "¿Qué artículo de 1941 impulsó la membresía de AA?","Un artículo del Saturday Evening Post por Jack Alexander"],
-["History",
- "Where is the General Service Office located?","New York City",
- "¿Dónde se encuentra la Oficina de Servicios Generales?","Ciudad de Nueva York"],
-["History",
- "What does GSO stand for?","General Service Office",
- "¿Qué significa OSG?","Oficina de Servicios Generales"],
+ "What 1941 article sent AA membership soaring?","A Saturday Evening Post article by Jack Alexander",
+ "¿Qué artículo de 1941 disparó la membresía de AA?","Un artículo del Saturday Evening Post por Jack Alexander"],
 ["History",
  "Approximately how many AA members worldwide?","Over 2 million",
  "¿Aproximadamente cuántos miembros de AA hay en el mundo?","Más de 2 millones"],
 ["History",
  "In about how many countries does AA exist?","Approximately 180",
  "¿En aproximadamente cuántos países existe AA?","Aproximadamente 180"],
-["History",
- "How many AA groups exist worldwide?","Over 120,000",
- "¿Cuántos grupos de AA existen en el mundo?","Más de 120,000"],
 
-// ── GRAPEVINE / LA VIÑA (20) ──
+// ── GRAPEVINE ──
 ["Grapevine",
  "What is the AA Grapevine?","The international journal of Alcoholics Anonymous",
  "¿Qué es el AA Grapevine?","La revista internacional de Alcohólicos Anónimos"],
@@ -362,11 +316,49 @@ const trivia = [
  "When was the first Grapevine issue published?","June 1944",
  "¿Cuándo se publicó el primer número del Grapevine?","Junio de 1944"],
 ["Grapevine",
- "What is the Grapevine's nickname?","The meeting in print",
- "¿Cuál es el apodo del Grapevine?","La reunión impresa"],
+ "What is the Grapevine's famous nickname?","The meeting in print",
+ "¿Cuál es el famoso apodo del Grapevine?","La reunión impresa"],
 ["Grapevine",
  "How often is the Grapevine published?","Monthly",
  "¿Con qué frecuencia se publica el Grapevine?","Mensualmente"],
+["Grapevine",
+ "Who owns the AA Grapevine?","AA members through the General Service Conference",
+ "¿Quién es dueño del AA Grapevine?","Los miembros de AA a través de la Conferencia de Servicios Generales"],
+["Grapevine",
+ "Does the Grapevine accept outside advertising?","No — it is fully self-supporting",
+ "¿Acepta el Grapevine publicidad externa?","No — es completamente autosuficiente"],
+["Grapevine",
+ "What type of content does the Grapevine feature?","Stories written by AA members sharing experience, strength, and hope",
+ "¿Qué tipo de contenido presenta el Grapevine?","Historias escritas por miembros de AA"],
+["Grapevine",
+ "What is the Grapevine website?","aagrapevine.org",
+ "¿Cuál es el sitio web del Grapevine?","aagrapevine.org"],
+["Grapevine",
+ "Is Grapevine available as a digital subscription?","Yes — at aagrapevine.org",
+ "¿Está disponible el Grapevine como suscripción digital?","Sí — en aagrapevine.org"],
+["Grapevine",
+ "Does the Grapevine have a podcast?","Yes — free to everyone!",
+ "¿Tiene el Grapevine un podcast?","¡Sí — gratis para todos!"],
+["Grapevine",
+ "Can you access Grapevine on a mobile app?","Yes — iOS and Android, free download",
+ "¿Se puede acceder al Grapevine en una aplicación móvil?","Sí — iOS y Android, descarga gratuita"],
+["Grapevine",
+ "What is the Carry the Message Project?","Bringing Grapevine literature to those who can't afford it",
+ "¿Qué es el Proyecto Lleva el Mensaje?","Llevar la literatura del Grapevine a quienes no pueden pagarla"],
+["Grapevine",
+ "True or False: Grapevine offers daily online content.","True — stories, quotes, and more every day",
+ "¿Verdadero o Falso: El Grapevine ofrece contenido diario en línea?","Verdadero — historias, citas y más cada día"],
+["Grapevine",
+ "In what year were the 12 Traditions first published in the Grapevine?","1946",
+ "¿En qué año se publicaron las 12 Tradiciones por primera vez en el Grapevine?","1946"],
+["Grapevine",
+ "How many years has the Grapevine been published continuously?","Over 80 years (since 1944)",
+ "¿Cuántos años lleva el Grapevine publicándose continuamente?","Más de 80 años (desde 1944)"],
+["Grapevine",
+ "Who writes the stories in the Grapevine?","AA members sharing experience, strength, and hope",
+ "¿Quién escribe las historias del Grapevine?","Miembros de AA compartiendo experiencia, fortaleza y esperanza"],
+
+// ── LA VIÑA ──
 ["La Viña",
  "What is La Viña?","The Spanish-language publication of AA",
  "¿Qué es La Viña?","La publicación en español de AA"],
@@ -376,188 +368,31 @@ const trivia = [
 ["La Viña",
  "How often is La Viña published?","Bimonthly (every two months)",
  "¿Con qué frecuencia se publica La Viña?","Bimestralmente (cada dos meses)"],
-["Grapevine",
- "Who owns the AA Grapevine?","AA members through the General Service Conference",
- "¿Quién es dueño del AA Grapevine?","Los miembros de AA a través de la Conferencia de Servicios Generales"],
-["Grapevine",
- "Does the Grapevine accept outside advertising?","No",
- "¿Acepta el Grapevine publicidad externa?","No"],
-["Grapevine",
- "What type of content does the Grapevine feature?","Stories written by AA members",
- "¿Qué tipo de contenido presenta el Grapevine?","Historias escritas por miembros de AA"],
-["Grapevine",
- "What is the Grapevine website?","aagrapevine.org",
- "¿Cuál es el sitio web del Grapevine?","aagrapevine.org"],
-["Grapevine",
- "Is Grapevine available as a digital subscription?","Yes",
- "¿Está disponible el Grapevine como suscripción digital?","Sí"],
-["Grapevine",
- "Does the Grapevine have a podcast?","Yes",
- "¿Tiene el Grapevine un podcast?","Sí"],
-["Grapevine",
- "Can you access Grapevine on a mobile app?","Yes — iOS and Android",
- "¿Se puede acceder al Grapevine en una aplicación móvil?","Sí — iOS y Android"],
-["Grapevine",
- "What is the Carry the Message Project?","Bringing Grapevine literature to those who can't afford it",
- "¿Qué es el Proyecto Lleva el Mensaje?","Llevar la literatura del Grapevine a quienes no pueden pagarla"],
-["Grapevine",
- "Who writes the stories in the Grapevine?","AA members sharing experience, strength, and hope",
- "¿Quién escribe las historias del Grapevine?","Miembros de AA compartiendo experiencia, fortaleza y esperanza"],
 ["La Viña",
  "What is La Viña's website?","aalavina.org",
  "¿Cuál es el sitio web de La Viña?","aalavina.org"],
-["Grapevine",
- "In what language is the Grapevine published?","English",
- "¿En qué idioma se publica el Grapevine?","Inglés"],
-["Grapevine",
- "What was the original format of the Grapevine?","A small newsletter / magazine",
- "¿Cuál era el formato original del Grapevine?","Un pequeño boletín / revista"],
-["Grapevine",
- "True or False: Grapevine offers daily online content.","True",
- "¿Verdadero o Falso: El Grapevine ofrece contenido diario en línea?","Verdadero"],
+["La Viña",
+ "True or False: La Viña is the only Spanish-language AA magazine in the world.","True!",
+ "¿Verdadero o Falso: La Viña es la única revista de AA en español en el mundo?","¡Verdadero!"],
 
-// ── 12 STEPS (15) ──
-["Steps",
- "How many steps are in the AA program?","12",
- "¿Cuántos pasos tiene el programa de AA?","12"],
-["Steps",
- "What is the first step about?","Admitting powerlessness over alcohol",
- "¿De qué trata el primer paso?","Admitir la impotencia ante el alcohol"],
-["Steps",
- "Which step involves a searching moral inventory?","Step 4",
- "¿Qué paso involucra un minucioso inventario moral?","Paso 4"],
-["Steps",
- "Which step involves admitting wrongs to another person?","Step 5",
- "¿Qué paso involucra admitir los errores a otra persona?","Paso 5"],
-["Steps",
- "Which step is about making a list of persons harmed?","Step 8",
- "¿Qué paso trata de hacer una lista de personas perjudicadas?","Paso 8"],
-["Steps",
- "Which step involves making direct amends?","Step 9",
- "¿Qué paso involucra hacer reparaciones directas?","Paso 9"],
-["Steps",
- "Which step is about prayer and meditation?","Step 11",
- "¿Qué paso trata sobre la oración y la meditación?","Paso 11"],
-["Steps",
- "What is Step 12 about?","Carrying the message to other alcoholics",
- "¿De qué trata el Paso 12?","Llevar el mensaje a otros alcohólicos"],
-["Steps",
- "Which step asks members to be 'entirely ready'?","Step 6",
- "¿Qué paso pide estar 'enteramente dispuestos'?","Paso 6"],
-["Steps",
- "Which step first mentions a 'Power greater than ourselves'?","Step 2",
- "¿Qué paso menciona por primera vez un 'Poder Superior a nosotros mismos'?","Paso 2"],
-["Steps",
- "Complete: 'Humbly asked Him to remove our ___.","Shortcomings (Step 7)",
- "Completa: 'Le pedimos humildemente que nos librase de nuestros ___.","Defectos de carácter (Paso 7)"],
-["Steps",
- "Which step is the daily 'maintenance step'?","Step 10",
- "¿Cuál es el paso de 'mantenimiento' diario?","Paso 10"],
-["Steps",
- "What does Step 3 ask members to do?","Turn will and life over to the care of God as they understood Him",
- "¿Qué pide el Paso 3?","Poner la voluntad y la vida al cuidado de Dios como cada quien lo conciba"],
-["Steps",
- "Who originally wrote the 12 Steps?","Bill Wilson (Bill W.)",
- "¿Quién escribió originalmente los 12 Pasos?","Bill Wilson (Bill W.)"],
-["Steps",
- "Complete: 'We admitted we were ___ over alcohol.'","Powerless",
- "Completa: 'Admitimos que éramos ___ ante el alcohol.'","Impotentes"],
+// ── SUBSCRIBE ──
+["Subscribe",
+ "How can you subscribe to the Grapevine?","Online at aagrapevine.org, phone, or see our table today!",
+ "¿Cómo puedes suscribirte al Grapevine?","En línea en aagrapevine.org, por teléfono, ¡o visita nuestra mesa hoy!"],
+["Subscribe",
+ "Is there a digital-only Grapevine subscription?","Yes — access on any device, anywhere, anytime",
+ "¿Existe una suscripción solo digital del Grapevine?","Sí — acceso en cualquier dispositivo, en cualquier lugar"],
+["Subscribe",
+ "Can you gift a Grapevine subscription?","Yes — it's one of the best Step 12 gifts you can give!",
+ "¿Puedes regalar una suscripción al Grapevine?","¡Sí — es uno de los mejores regalos del Paso 12!"],
+["Subscribe",
+ "What is the Grapevine app?","A free app with access to stories, daily quotes, and your subscription",
+ "¿Qué es la aplicación del Grapevine?","Una aplicación gratuita con historias, citas diarias y tu suscripción"],
+["Subscribe",
+ "Can you submit your own story to the Grapevine?","Yes — all AA members can share their experience, strength, and hope",
+ "¿Puedes enviar tu propia historia al Grapevine?","Sí — todos los miembros de AA pueden compartir su experiencia"],
 
-// ── 12 TRADITIONS (15) ──
-["Traditions",
- "How many traditions does AA have?","12",
- "¿Cuántas tradiciones tiene AA?","12"],
-["Traditions",
- "What is Tradition 1 about?","Common welfare — unity comes first",
- "¿De qué trata la Tradición 1?","El bienestar común — la unidad es lo primero"],
-["Traditions",
- "What does Tradition 3 say about membership?","The only requirement is a desire to stop drinking",
- "¿Qué dice la Tradición 3 sobre la membresía?","El único requisito es un deseo de dejar de beber"],
-["Traditions",
- "What is Tradition 5 about?","Each group's primary purpose: carry the message",
- "¿De qué trata la Tradición 5?","El propósito primordial de cada grupo: llevar el mensaje"],
-["Traditions",
- "What does Tradition 7 emphasize?","Every AA group should be fully self-supporting",
- "¿Qué enfatiza la Tradición 7?","Cada grupo de AA debe ser completamente autosuficiente"],
-["Traditions",
- "What is Tradition 10 about?","AA has no opinion on outside issues",
- "¿De qué trata la Tradición 10?","AA no tiene opinión sobre asuntos ajenos"],
-["Traditions",
- "What does Tradition 11 say?","Public relations based on attraction rather than promotion",
- "¿Qué dice la Tradición 11?","Relaciones públicas basadas en la atracción más que en la promoción"],
-["Traditions",
- "What is Tradition 12 about?","Anonymity is the spiritual foundation",
- "¿De qué trata la Tradición 12?","El anonimato es la base espiritual"],
-["Traditions",
- "What does Tradition 2 describe?","A loving God as expressed in group conscience",
- "¿Qué describe la Tradición 2?","Un Dios amoroso tal como se exprese en la conciencia de grupo"],
-["Traditions",
- "What does Tradition 4 allow?","Each group to be autonomous except in matters affecting AA as a whole",
- "¿Qué permite la Tradición 4?","Cada grupo es autónomo excepto en asuntos que afecten a AA en su totalidad"],
-["Traditions",
- "What does Tradition 6 warn against?","Lending the AA name to outside enterprises",
- "¿Contra qué advierte la Tradición 6?","Prestar el nombre de AA a empresas ajenas"],
-["Traditions",
- "What does Tradition 8 state?","AA should remain forever nonprofessional",
- "¿Qué establece la Tradición 8?","AA nunca debe tener carácter profesional"],
-["Traditions",
- "What does Tradition 9 say?","AA ought never be organized but may create service boards",
- "¿Qué dice la Tradición 9?","AA no debe organizarse nunca pero puede crear juntas de servicio"],
-["Traditions",
- "Tradition 12 mentions anonymity at what level?","Press, radio, and films",
- "¿La Tradición 12 menciona el anonimato a qué nivel?","Prensa, radio y cine"],
-["Traditions",
- "What is the spiritual foundation in Tradition 12?","Anonymity",
- "¿Cuál es la base espiritual en la Tradición 12?","El anonimato"],
-
-// ── BIG BOOK (15) ──
-["Big Book",
- "What is the official title of the 'Big Book'?","Alcoholics Anonymous",
- "¿Cuál es el título oficial del 'Libro Grande'?","Alcohólicos Anónimos"],
-["Big Book",
- "What year was the Big Book first published?","1939",
- "¿En qué año se publicó por primera vez el Libro Grande?","1939"],
-["Big Book",
- "Who was the primary author of the Big Book?","Bill Wilson",
- "¿Quién fue el autor principal del Libro Grande?","Bill Wilson"],
-["Big Book",
- "Which chapter is for non-believers?","Chapter 4: We Agnostics",
- "¿Qué capítulo es para los no creyentes?","Capítulo 4: Nosotros los Agnósticos"],
-["Big Book",
- "Which chapter contains 'How It Works'?","Chapter 5",
- "¿Qué capítulo contiene 'Cómo Funciona'?","Capítulo 5"],
-["Big Book",
- "What is Chapter 8 titled?","To Wives",
- "¿Cómo se titula el Capítulo 8?","A las Esposas"],
-["Big Book",
- "How many editions of the Big Book exist?","Four (1939, 1955, 1976, 2001)",
- "¿Cuántas ediciones del Libro Grande existen?","Cuatro (1939, 1955, 1976, 2001)"],
-["Big Book",
- "First sentence of 'How It Works'?","Rarely have we seen a person fail...",
- "¿Primera frase de 'Cómo Funciona'?","Rara vez hemos visto fracasar a una persona..."],
-["Big Book",
- "Has the Big Book been translated into 70+ languages?","Yes",
- "¿Se ha traducido el Libro Grande a más de 70 idiomas?","Sí"],
-["Big Book",
- "What chapter discusses 'Working with Others'?","Chapter 7",
- "¿Qué capítulo habla de 'Trabajando con los Demás'?","Capítulo 7"],
-["Big Book",
- "How many pages is the main text?","164 pages",
- "¿Cuántas páginas tiene el texto principal?","164 páginas"],
-["Big Book",
- "What is the 'Doctor's Opinion'?","A letter from Dr. Silkworth explaining alcoholism",
- "¿Qué es la 'Opinión del Médico'?","Una carta del Dr. Silkworth explicando el alcoholismo"],
-["Big Book",
- "'Alcoholics Anonymous' refers to what?","Both the fellowship and the book",
- "¿A qué se refiere 'Alcohólicos Anónimos'?","Tanto a la comunidad como al libro"],
-["Big Book",
- "Which chapter is 'The Family Afterward'?","Chapter 9",
- "¿Qué capítulo es 'La Familia Después'?","Capítulo 9"],
-["Big Book",
- "Which chapter is titled 'Into Action'?","Chapter 6",
- "¿Qué capítulo se titula 'En Acción'?","Capítulo 6"],
-
-// ── CULTURE (10) ──
+// ── CULTURE ──
 ["Culture",
  "What is the Serenity Prayer?","God, grant me the serenity to accept the things I cannot change, courage to change the things I can, and wisdom to know the difference.",
  "¿Qué es la Oración de la Serenidad?","Dios, concédeme la serenidad para aceptar las cosas que no puedo cambiar, valor para cambiar las que sí puedo, y sabiduría para conocer la diferencia."],
@@ -565,61 +400,28 @@ const trivia = [
  "What does 'One Day at a Time' mean?","Focus on staying sober just for today",
  "¿Qué significa 'Un Día a la Vez'?","Enfocarse en mantenerse sobrio solo por hoy"],
 ["Culture",
- "What is a 'home group'?","A member's primary AA group",
- "¿Qué es un 'grupo base'?","El grupo principal de AA de un miembro"],
-["Culture",
- "What is a sponsor?","An experienced member who guides another through the steps",
- "¿Qué es un padrino o madrina?","Un miembro experimentado que guía a otro a través de los pasos"],
-["Culture",
- "What is a 'group conscience'?","The collective decision of group members",
- "¿Qué es una 'conciencia de grupo'?","La decisión colectiva de los miembros del grupo"],
-["Culture",
  "What are AA chips or medallions?","Tokens marking sobriety milestones",
  "¿Qué son las fichas o medallones de AA?","Fichas que marcan hitos de sobriedad"],
 ["Culture",
- "What is an 'open meeting'?","A meeting anyone can attend",
- "¿Qué es una 'reunión abierta'?","Una reunión a la que cualquiera puede asistir"],
-["Culture",
- "What is a 'closed meeting'?","Only for those with a desire to stop drinking",
- "¿Qué es una 'reunión cerrada'?","Solo para quienes desean dejar de beber"],
+ "What does the circle and triangle represent?","Unity, Service, and Recovery",
+ "¿Qué representa el círculo y triángulo?","Unidad, Servicio y Recuperación"],
 ["Culture",
  "What does 'Keep Coming Back' mean?","Encouragement to continue attending meetings",
  "¿Qué significa 'Sigue Viniendo'?","Ánimo para seguir asistiendo a las reuniones"],
 ["Culture",
- "What does 'Easy Does It' mean?","Take things slowly and calmly",
- "¿Qué significa 'Poco a Poco'?","Tomar las cosas con calma"],
+ "What does 'HOW' stand for?","Honesty, Open-mindedness, Willingness",
+ "¿Qué significa 'HOW' en AA?","Honestidad, Apertura mental, Buena voluntad"],
 
-// ── SERVICE (5) ──
+// ── SERVICE ──
 ["Service",
  "What is the Responsibility Declaration?","When anyone reaches out for help, I want the hand of AA always to be there. And for that: I am responsible.",
  "¿Cuál es la Declaración de Responsabilidad?","Cuando cualquiera, dondequiera, extienda su mano pidiendo ayuda, quiero que la mano de AA esté siempre allí. Y por eso: Yo soy responsable."],
 ["Service",
  "What are the Three Legacies of AA?","Recovery, Unity, and Service",
  "¿Cuáles son los Tres Legados de AA?","Recuperación, Unidad y Servicio"],
-["Culture",
- "What does the circle and triangle represent?","Unity, Service, and Recovery",
- "¿Qué representa el círculo y triángulo?","Unidad, Servicio y Recuperación"],
-["Culture",
+["Service",
  "What is the primary purpose of every AA group?","To carry its message to the alcoholic who still suffers",
- "¿Cuál es el propósito primordial de cada grupo de AA?","Llevar su mensaje al alcohólico que aún sufre"],
-["Culture",
- "What does 'First Things First' mean?","Prioritize sobriety above all else",
- "¿Qué significa 'Primero lo Primero'?","Priorizar la sobriedad por encima de todo"],
-["Culture",
- "What color is the 24-hour sobriety chip?","White or silver (varies by area)",
- "¿De qué color es la ficha de sobriedad de 24 horas?","Blanca o plateada (varía según el área)"],
-["Service",
- "What is the General Service Conference?","AA's annual meeting where group conscience guides policy",
- "¿Qué es la Conferencia de Servicios Generales?","La reunión anual de AA donde la conciencia de grupo guía las políticas"],
-["Service",
- "How many Concepts for World Service?","12",
- "¿Cuántos Conceptos para el Servicio Mundial hay?","12"],
-["Culture",
- "What does 'HOW' stand for?","Honesty, Open-mindedness, Willingness",
- "¿Qué significa 'HOW' en AA?","Honestidad, Apertura mental, Buena voluntad"],
-["Culture",
- "What is the AA daily meditation book?","Daily Reflections",
- "¿Cuál es el libro de meditación diaria de AA?","Reflexiones Diarias"]
+ "¿Cuál es el propósito primordial de cada grupo de AA?","Llevar su mensaje al alcohólico que aún sufre"]
 ];
 
 // ── INSPIRATIONAL QUOTES [en, es, attribution] ──────────────────────────────
@@ -698,7 +500,33 @@ const quotes = [
  "— AA Fellowship"],
 ["Surrender to win.",
  "Rendirse para ganar.",
- "— AA Saying"]
+ "— AA Saying"],
+
+// ── GV HUMOR ──
+["Why did the alcoholic subscribe to the Grapevine? Because it's the only vine worth clinging to!",
+ "¿Por qué el alcohólico se suscribió al Grapevine? ¡Porque es la única vid que vale la pena!",
+ "— GV Humor"],
+["The Grapevine has been published since 1944. That's more commitment than most of my relationships before sobriety!",
+ "El Grapevine se publica desde 1944. ¡Más compromiso que la mayoría de mis relaciones antes de la sobriedad!",
+ "— GV Humor"],
+["My sponsor gave me homework: read the Grapevine. I've never been more excited about an assignment!",
+ "Mi padrino me dio tarea: leer el Grapevine. ¡Nunca estuve tan emocionado por una asignación!",
+ "— GV Humor"],
+["The Grapevine doesn't accept outside advertising. Sobriety is already the best deal in town!",
+ "El Grapevine no acepta publicidad externa. ¡La sobriedad ya es el mejor negocio del mundo!",
+ "— GV Humor"],
+["Why is the Grapevine called 'the meeting in print'? Because you can attend in your pajamas and no one judges you!",
+ "¿Por qué el Grapevine se llama 'la reunión impresa'? ¡Porque puedes asistir en pijama y nadie te juzga!",
+ "— GV Humor"],
+["I used to drink to escape reality. Now I read the Grapevine — and reality got a whole lot better!",
+ "Antes bebía para escapar de la realidad. Ahora leo el Grapevine — ¡y la realidad mejoró muchísimo!",
+ "— GV Humor"],
+["Someone asked: 'Is the Grapevine only for alcoholics?' I said: 'No — but most people who find it consider it a miracle!'",
+ "Alguien preguntó: '¿El Grapevine es solo para alcohólicos?' Dije: '¡No — pero la mayoría lo considera un milagro!'",
+ "— GV Humor"],
+["How do you spot a Grapevine subscriber at a meeting? They're still reading when everyone else is getting coffee!",
+ "¿Cómo reconoces a un suscriptor del Grapevine en una reunión? ¡Sigue leyendo cuando todos los demás van por café!",
+ "— GV Humor"]
 ];
 
 // ── FUN FACTS [en, es] ──────────────────────────────────────────────────────
@@ -742,7 +570,19 @@ const facts = [
 ["NETA 65 is the Northeast Texas Area 65 of Alcoholics Anonymous.",
  "NETA 65 es el Área 65 del Noreste de Texas de Alcohólicos Anónimos."],
 ["The Grapevine offers a free podcast with stories of recovery.",
- "El Grapevine ofrece un podcast gratuito con historias de recuperación."]
+ "El Grapevine ofrece un podcast gratuito con historias de recuperación."],
+["You can submit your own story to the Grapevine — all AA members are invited to share!",
+ "¡Puedes enviar tu propia historia al Grapevine — todos los miembros de AA están invitados a compartir!"],
+["The Grapevine app gives you access to the full archive of AA stories right on your phone.",
+ "La aplicación del Grapevine te da acceso al archivo completo de historias de AA en tu teléfono."],
+["A digital Grapevine subscription lets you read anywhere — meetings, airports, or your home group!",
+ "Una suscripción digital al Grapevine te permite leer en cualquier lugar — ¡reuniones, aeropuertos o tu grupo base!"],
+["The Carry the Message Project has sent Grapevine literature to thousands of AA members in need.",
+ "El Proyecto Lleva el Mensaje ha enviado literatura del Grapevine a miles de miembros de AA en necesidad."],
+["Gifting a Grapevine subscription is one of the most powerful Step 12 actions you can take.",
+ "Regalar una suscripción al Grapevine es una de las acciones más poderosas del Paso 12."],
+["You can follow the Grapevine on Instagram, YouTube, and listen on all major podcast platforms — for free!",
+ "¡Puedes seguir al Grapevine en Instagram, YouTube y escucharlo en todas las plataformas de podcast, gratis!"]
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -751,6 +591,7 @@ const facts = [
 
 const $ = id => document.getElementById(id);
 let paused = false, tmr = null, arTmr = null, cdInt = null;
+let slideStart = 0, slideDuration = 0;
 let lang = 'both'; // 'en', 'es', 'both'
 let interactions = 0;
 const CIRC = 2 * Math.PI * 45; // ~283 for countdown ring
@@ -773,7 +614,7 @@ function shuffle(arr){
 }
 
 // ── DECKS (no repeats until all items shown) ──
-const originals = { img: images, yt: ytVids, vid: localVids, pdf: pdfs, tri: trivia, quote: quotes, fact: facts };
+const originals = { img: images, yt: ytVids, vid: localVids, tri: trivia, quote: quotes, fact: facts };
 const decks = {};
 function initDecks(){
   for(const k in originals) decks[k] = shuffle(originals[k]);
@@ -836,7 +677,10 @@ function prog(ms){
   requestAnimationFrame(() => { p.style.transition = 'width ' + ms + 'ms linear'; p.style.width = '100vw'; });
 }
 
-function sched(ms){ prog(ms); if(!paused) tmr = setTimeout(next, ms); }
+function sched(ms){
+  slideDuration = ms; slideStart = Date.now();
+  prog(ms); if(!paused) tmr = setTimeout(next, ms);
+}
 
 function langVis(en, es){
   if(lang === 'en') return en ? '' : 'none';
@@ -895,9 +739,13 @@ function confetti(){
 function showImg(replay){
   hideAll();
   const src = replay || draw('img');
-  $('simg').onload = function(){ showSlide('s-img'); sched(DUR.img); };
-  $('simg').onerror = function(){ next(); };
-  $('simg').src = encodeURI(src);
+  const img = $('simg');
+  function onLoaded(){ img.onload = img.onerror = null; showSlide('s-img'); sched(DUR.img); }
+  img.onload = onLoaded;
+  img.onerror = function(){ img.onload = img.onerror = null; next(); };
+  img.src = encodeURI(src);
+  // Handle already-cached images (onload won't re-fire for same src)
+  if(img.complete && img.naturalWidth > 0) onLoaded();
   $('cap').textContent = src.split('/').pop().replace(/\.\w+$/, '');
   if(!replay){ pushHist('img', src); (new Image()).src = encodeURI(images[Math.floor(Math.random()*images.length)]); }
   updateHistUI();
@@ -1003,17 +851,6 @@ function showFact(replay){
   updateHistUI();
 }
 
-function showPdf(replay){
-  hideAll();
-  const p = replay || draw('pdf');
-  $('spdf').src = encodeURI(p.f) + '#toolbar=0&view=FitH';
-  showSlide('s-pdf');
-  $('cap').textContent = p.t;
-  sched(DUR.pdf);
-  if(!replay) pushHist('pdf', p);
-  updateHistUI();
-}
-
 // ── REPLAY A HISTORY ENTRY ──
 function replayEntry(entry){
   switch(entry.type){
@@ -1023,7 +860,6 @@ function replayEntry(entry){
     case 'tri':   showTri(entry.data, entry.revealed); break;
     case 'quote': showQuote(entry.data); break;
     case 'fact':  showFact(entry.data);  break;
-    case 'pdf':   showPdf(entry.data);   break;
     default:      showImg(entry.data);
   }
 }
@@ -1091,7 +927,6 @@ function next(){
         case 'yt':    showYT();    return;
         case 'quote': showQuote(); return;
         case 'fact':  showFact();  return;
-        case 'pdf':   showPdf();   return;
         case 'vid':   showVid();   return;
       }
     }
@@ -1104,8 +939,14 @@ function pp(){
   paused = !paused;
   $('ppb').innerHTML = paused ? '&#x25B6; Play' : '&#x23F8; Pause';
   $('pind').style.display = paused ? 'block' : 'none';
-  if(paused) clearTimeout(tmr);
-  else next();
+  if(paused){
+    clearTimeout(tmr);
+  } else {
+    // Resume current slide with remaining time (min 2s)
+    const remaining = Math.max(2000, slideDuration - (Date.now() - slideStart));
+    prog(remaining);
+    tmr = setTimeout(next, remaining);
+  }
 }
 
 function goFS(){
